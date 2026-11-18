@@ -24,7 +24,7 @@ import { registerDashboardRoutes } from "./modules/dashboard/dashboard.routes.js
 export function createApp() {
   const app = Fastify({ logger: false });
 
-  app.register(cors, { origin: true, credentials: true });
+  app.register(cors, { origin: true, credentials: true, methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"] });
   app.register(cookie);
 
   app.get("/health", async () => ({ status: "ok", service: "cfa-platform-backend" }));
@@ -41,6 +41,9 @@ export function createApp() {
   registerDashboardRoutes(app, dashboardRepository, authService);
 
   app.setErrorHandler((error, _request, reply) => {
+    if (!(error instanceof HttpError) && !(error instanceof ZodError)) {
+      console.error("Unhandled request error", error);
+    }
     const statusCode = error instanceof HttpError ? error.statusCode : error instanceof ZodError ? 400 : 500;
     const code = error instanceof HttpError ? error.code : error instanceof ZodError ? "VALIDATION_ERROR" : "INTERNAL_SERVER_ERROR";
     const message = error instanceof HttpError ? error.message : error instanceof ZodError ? "Please check the submitted fields." : "Something went wrong.";
