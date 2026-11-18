@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum CfaLevel {
+  LEVEL_I
+  LEVEL_II
+  LEVEL_III
+}
+
+enum StudyPlanStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+enum UserRole {
+  STUDENT
+}
+
+model User {
+  id                    String                 @id @default(cuid())
+  email                 String                 @unique
+  passwordHash          String
+  displayName           String?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  role                  UserRole               @default(STUDENT)
+  cfaProfile            CfaProfile?
+  onboardingPreferences OnboardingPreferences?
+  studyPlans            StudyPlan[]
+  sessions              Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, revokedAt])
+}
+
+model CfaProfile {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  level         CfaLevel
+  examDate      DateTime
+  status        String?
+  experience    String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model OnboardingPreferences {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  dailyStudyHours Int
+  studyDays       String[]
+  learningStyle   String?
+  strongSubjects  String[]
+  weakSubjects    String[]
+  completedAt     DateTime?
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model StudyPlan {
+  id          String          @id @default(cuid())
+  userId      String
+  version     Int
+  status      StudyPlanStatus @default(ACTIVE)
+  generatedAt DateTime        @default(now())
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, version])
+  @@index([userId, status])
+}

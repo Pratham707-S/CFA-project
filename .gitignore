@@ -1,0 +1,10 @@
+node_modules/
+.next/
+.next-stale/
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+!backend/.env.example
+.neon
