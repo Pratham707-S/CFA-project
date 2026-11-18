@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiRequest } from "@/lib/api";
+import "./dashboard-layout.css";
 
 type DashboardData = {
   user: { displayName: string | null; email: string; role: string };
@@ -11,7 +12,11 @@ type DashboardData = {
   studyPlan: { version: number; status: string; generatedAt: string } | null;
 };
 
-const navGroups = [["LEARN", ["Study Plan", "Subjects", "Concept Library", "Formula Vault", "Flashcards"]], ["PRACTICE", ["Question Bank", "Mock Exams", "Mistake Book"]], ["EXPLORE", ["Market News", "AI Tutor", "Career Prep"]], ["PROGRESS", ["Analytics", "Goals", "Achievements"]]];
+const navGroups = [
+  ["Study", ["My CFA Plan", "Learn", "Practice", "Mock Exams", "Flashcards", "Mistake Book"]],
+  ["Explore", ["Market News", "AI Tutor", "Career Prep"]],
+  ["Progress", ["Analytics", "Goals", "Settings"]],
+] as const;
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -34,7 +39,7 @@ export default function DashboardPage() {
   return <main className="dashboard-shell">
     <aside className="dashboard-sidebar">
       <div className="dashboard-brand"><span className="dashboard-mark">▮▮▮</span> CFA Prep</div>
-      <nav><button className="active"><span>⌂</span>Dashboard</button>{navGroups.map(([group, items]) => <div className="dashboard-nav-group" key={group as string}><small>{group}</small>{(items as string[]).map(item => <button key={item}><span>◫</span>{item}</button>)}</div>)}</nav>
+      <nav><button className="active"><span>⌂</span>Dashboard</button>{navGroups.map(([group, items]) => <div className="dashboard-nav-group" key={group}><small>{group}</small>{items.map(item => <button key={item}><span>◫</span>{item}</button>)}</div>)}</nav>
       <div className="sidebar-plan"><b>▮▮▮ &nbsp; CFA Level I</b><span>Aug 2026 Exam</span><i><em /></i><small>124 days left</small></div><div className="sidebar-quote">“Discipline today.<br />A stronger tomorrow.”</div><div className="dashboard-sidebar-bottom"><button>Settings</button><button>Help & Support</button></div>
     </aside>
     <section className="dashboard-main">
