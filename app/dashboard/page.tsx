@@ -26,7 +26,41 @@ const navigationIcons = {
 } as const;
 
 function Icon({ name, size = 22 }: { name: string; size?: number }) {
-  return <img className="dashboard-icon" alt="" width={size} height={size} src={`/dashboard-icons/${name}.png`} />;
+  const paths: Record<string, React.ReactNode> = {
+    home: <><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9M9 20v-7h6v7"/></>,
+    plan: <><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4m8-4v4M8 11h8m-8 4h5"/></>,
+    learn: <><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H12v18H5.5A2.5 2.5 0 0 0 3 23z"/><path d="M21 5.5A2.5 2.5 0 0 0 18.5 3H12v18h6.5A2.5 2.5 0 0 1 21 23z"/></>,
+    practice: <><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8m-8 4h8m-8 4h5"/></>,
+    mock: <><path d="M4 4h16v13H4zM8 21h8m-4-4v4"/><path d="m7 13 3-3 2 2 4-5"/></>,
+    flash: <><path d="M13 2 4 13h7l-1 9 10-12h-7z"/></>,
+    mistake: <><path d="M6 3h12a2 2 0 0 1 2 2v17l-8-5-8 5V5a2 2 0 0 1 2-2z"/></>,
+    news: <><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M7 8h4v4H7zm7 0h3m-3 4h3M7 16h10"/></>,
+    tutor: <><path d="M12 3a9 9 0 0 0-9 9v5a3 3 0 0 0 3 3h2v-7H5a7 7 0 0 1 14 0h-3v7h2a3 3 0 0 0 3-3v-5a9 9 0 0 0-9-9z"/></>,
+    career: <><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V4h8v3m-13 5h18m-11 0v2h4v-2"/></>,
+    analytics: <><path d="M3 3v18h18"/><path d="m7 14 4-4 3 2 6-7"/></>,
+    goals: <><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></>,
+    settings: <><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.6a8 8 0 0 1-1.5.9l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.5-.9l-1.7.6-1.4-2.4 1.4-1.1a7 7 0 0 1 0-1.8l-1.4-1.1 1.4-2.4 1.7.6a8 8 0 0 1 1.5-.9l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.5.9l1.7-.6 1.4 2.4-1.4 1.1a7 7 0 0 1 0 1.8z"/></>,
+    logo: <><path d="M4 20V11h4v9zm6 0V6h4v14zm6 0V3h4v17z" fill="currentColor" stroke="none"/></>,
+    search: <><circle cx="10.8" cy="10.8" r="7"/><path d="m16 16 5 5"/></>,
+    bell: <><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 12h4"/></>,
+    calendar: <><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18m-14 4h2m3 0h2m-7 3h2"/></>,
+    target: <><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="m12 12 7-7m-4 0h4v4"/></>,
+    clock: <><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></>,
+    bot: <><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M12 3v4m-4 6h.01M16 13h.01M9 17h6m-9-13L4 2m16 3 1-3"/></>,
+    check: <><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m7 12 3 3 7-7" stroke="white"/></>,
+    circle: <circle cx="12" cy="12" r="9"/>,
+    fire: <path d="M12 22c5 0 8-4 7-9-.5-2-2-4-4-6 0 3-1 4-2 4 1-5-2-8-5-10 1 5-1 7-3 10-3 5 0 11 7 11z"/>,
+    doc: <><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6m-10 4h6m-6 4h6"/></>,
+    accuracy: <><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></>,
+    send: <><path d="m22 2-7 20-4-9-9-4zM22 2 11 13"/></>,
+    book: <><path d="M3 5a2 2 0 0 1 2-2h6v18H5a2 2 0 0 0-2 2zm18 0a2 2 0 0 0-2-2h-6v18h6a2 2 0 0 1 2 2z"/></>,
+    list: <><path d="M9 6h12M9 12h12M9 18h12"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></>,
+    spark: <><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l1 2 2 1-2 1-1 2-1-2-2-1 2-1z"/></>,
+    weekly: <><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M7 2v4m10-4v4M3 9h18m-14 4v4m5-4v4m5-4v4"/></>,
+    warn: <><path d="M12 3 2 21h20z"/><path d="M12 9v5m0 3h.01"/></>,
+    yellow: <><path d="m12 2 2.5 6 6.5.5-5 4.3 1.5 6.2-5.5-3.4-5.5 3.4 1.5-6.2-5-4.3L9.5 8z"/></>,
+  };
+  return <svg className="dashboard-icon" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name] ?? paths.practice}</svg>;
 }
 
 export default function DashboardPage() {
