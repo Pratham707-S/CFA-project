@@ -321,6 +321,23 @@
   gap: 20px;
 }
 
+.cfa-theme-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--cfa-text-body);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 50%;
+  transition: background 0.15s ease;
+}
+
+.cfa-theme-btn:hover {
+  background: #f1f5f9;
+}
+
 .cfa-bell-btn {
   position: relative;
   background: none;

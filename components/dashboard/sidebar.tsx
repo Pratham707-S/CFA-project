@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import {
   CfaBarsLogo,
   LayoutDashboard,
@@ -55,16 +56,29 @@ export function Sidebar({
     { name: "Settings", icon: Settings },
   ];
 
+  const router = useRouter();
+
   const handleNavClick = (name: string) => {
     if (onNavigate) {
       onNavigate(name);
+    }
+    if (name === "Dashboard") {
+      router.push("/dashboard");
+    } else if (name === "My CFA Plan") {
+      router.push("/plan");
     }
   };
 
   return (
     <aside className="cfa-sidebar">
       {/* Brand Logo */}
-      <div className="cfa-sidebar-brand">
+      <div
+        className="cfa-sidebar-brand"
+        onClick={() => router.push("/dashboard")}
+        style={{ cursor: "pointer" }}
+        role="button"
+        tabIndex={0}
+      >
         <span className="cfa-sidebar-logo-icon">
           <CfaBarsLogo size={22} />
         </span>
