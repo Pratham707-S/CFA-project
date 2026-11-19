@@ -12,6 +12,13 @@ type DashboardData = {
   studyPlan: { version: number; status: string; generatedAt: string } | null;
 };
 
+const previewData: DashboardData = {
+  user: { displayName: "Student", email: "", role: "STUDENT" },
+  cfaProfile: null,
+  preferences: null,
+  studyPlan: null,
+};
+
 const navGroups = [
   ["Study", ["My CFA Plan", "Learn", "Practice", "Mock Exams", "Flashcards", "Mistake Book"]],
   ["Explore", ["Market News", "AI Tutor", "Career Prep"]],
@@ -68,13 +75,21 @@ export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [error, setError] = useState("");
 
-  useEffect(() => {
+  const loadDashboard = () => {
+    setError("");
+    setData(null);
     apiRequest<DashboardData>("/dashboard")
       .then((result) => setData(result))
-      .catch((reason) => setError(reason instanceof Error ? reason.message : "Could not load your dashboard."));
+      .catch((reason) => {
+        setError(reason instanceof Error ? reason.message : "Could not load your dashboard.");
+        setData(previewData);
+      });
+  };
+
+  useEffect(() => {
+    loadDashboard();
   }, []);
 
-  if (error) return <main className="dashboard-shell"><div className="dashboard-error"><h1>Dashboard unavailable</h1><p>{error}</p><button className="primary-button" onClick={() => router.push("/login")}>Back to login →</button></div></main>;
   if (!data) return <main className="dashboard-shell"><div className="dashboard-loading">Loading your CFA dashboard…</div></main>;
 
   const level = data.cfaProfile?.level?.replace("LEVEL_", "Level ") ?? "CFA Level I";
@@ -90,6 +105,7 @@ export default function DashboardPage() {
     <section className="dashboard-main">
       <header className="dashboard-header"><div className="dashboard-search"><Icon name="search" size={19} /> <span>Search for topics, questions, or ask AI…</span><kbd>⌘ K</kbd></div><div className="dashboard-header-actions"><span className="notification"><Icon name="bell" size={26} /></span><div className="dashboard-user"><span className="avatar">{displayName[0].toUpperCase()}</span><span>{data.user.displayName ?? data.user.email}</span>⌄</div></div></header>
       <div className="dashboard-content">
+        {error && <div className="dashboard-data-notice" role="status"><span><b>Preview mode:</b> live account data isn&apos;t available ({error}). Your dashboard layout is still shown.</span><div><button type="button" onClick={loadDashboard}>Retry</button><button type="button" onClick={() => router.push("/login")}>Sign in</button></div></div>}
         <div className="dashboard-topline"><div><p className="dashboard-date">Monday, 18 November 2026</p><h1>Good morning, {displayName} <span>👋</span></h1><p className="dashboard-muted">Let&apos;s keep building your CFA journey.</p></div><div className="dashboard-context"><span><Icon name="logo" /> {level}⌄</span><span><Icon name="calendar" /> <b>124 days</b> to exam <small>{examDate}</small></span><button className="ask-ai-button">✦ Ask AI</button></div></div>
         <div className="dashboard-grid dashboard-grid-top">
           <section className="dashboard-card study-card"><div className="card-heading"><div><p className="card-kicker"><Icon name="target" size={30} /> Today&apos;s Study Plan</p><h2 className="study-summary">4 of 5 tasks · 2h 10m planned</h2></div><span className="time-badge"><Icon name="clock" /> 2h 10m</span></div><div className="task-list"><div className="task done"><Icon name="check" size={26} /><div><b>Quantitative Methods – Time Value of Money</b><small>Continue lesson · 3.2 TVM Applications</small></div><em>40 min</em></div><div className="task"><Icon name="circle" size={26} /><div><b>Financial Statement Analysis – Inventory</b><small>New lesson · 4.1 Inventory Valuation</small></div><em>35 min</em></div><div className="task"><Icon name="circle" size={26} /><div><b>Practice Questions – Mixed Set</b><small>20 MCQs · Quant + FSA</small></div><em>30 min</em></div><div className="task"><Icon name="circle" size={26} /><div><b>Ethics – Standards I–III</b><small>Quick revision · Key concepts</small></div><em>25 min</em></div></div><button className="primary-button full-button">Continue Today&apos;s Plan →</button></section>
