@@ -66,6 +66,8 @@ export function Sidebar({
       router.push("/dashboard");
     } else if (name === "My CFA Plan") {
       router.push("/plan");
+    } else if (name === "Learn") {
+      router.push("/learn");
     }
   };
 
