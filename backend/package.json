@@ -12,6 +12,7 @@
     "@fastify/cors": "latest",
     "@prisma/adapter-pg": "^7.10.1",
     "@prisma/client": "^7.10.1",
+    "dotenv": "^18.0.10",
     "fastify": "latest",
     "jose": "^6.2.17",
     "pg": "^8.23.1",

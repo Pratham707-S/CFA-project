@@ -1,0 +1,1832 @@
+/* ==========================================================================
+   CFA PREP DASHBOARD — PREMIUM LIGHT EDUCATIONAL SAAS DESIGN
+   Target: 1536 × 1024 Desktop Reference
+   ========================================================================== */
+
+:root {
+  --cfa-bg-page: #f3f5f8;
+  --cfa-bg-card: #ffffff;
+  --cfa-bg-surface-soft: #f8fafc;
+  --cfa-bg-green-soft: #eaf6f0;
+  --cfa-border: #e2e8f0;
+  --cfa-border-soft: #edf2f7;
+  --cfa-green-primary: #0d7b5f;
+  --cfa-green-hover: #0a654e;
+  --cfa-green-active: #07523f;
+  --cfa-text-navy: #0f172a;
+  --cfa-text-body: #334155;
+  --cfa-text-muted: #64748b;
+  --cfa-text-light: #94a3b8;
+  --cfa-shadow-card: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+  --cfa-shadow-dropdown: 0 10px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.06);
+  --cfa-radius-card: 14px;
+  --cfa-radius-sm: 8px;
+  --cfa-sidebar-width: 230px;
+  --cfa-header-height: 64px;
+}
+
+/* Force Clean Modern Sans-Serif Typography throughout Dashboard */
+.cfa-dashboard-shell,
+.cfa-dashboard-shell * {
+  box-sizing: border-box;
+}
+
+.cfa-dashboard-shell h1,
+.cfa-dashboard-shell h2,
+.cfa-dashboard-shell h3,
+.cfa-dashboard-shell h4,
+.cfa-dashboard-shell h5,
+.cfa-dashboard-shell h6,
+.cfa-dashboard-shell p,
+.cfa-dashboard-shell span,
+.cfa-dashboard-shell button,
+.cfa-dashboard-shell input,
+.cfa-dashboard-shell a,
+.cfa-dashboard-shell div {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+
+/* Container Shell */
+.cfa-dashboard-shell {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--cfa-bg-page);
+  color: var(--cfa-text-navy);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Loading State */
+.cfa-dashboard-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  font-size: 15px;
+  color: var(--cfa-text-muted);
+  background: var(--cfa-bg-page);
+}
+
+/* --------------------------------------------------------------------------
+   SIDEBAR
+   -------------------------------------------------------------------------- */
+.cfa-sidebar {
+  width: var(--cfa-sidebar-width);
+  flex-shrink: 0;
+  background: var(--cfa-bg-card);
+  border-right: 1px solid var(--cfa-border);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 30;
+}
+
+.cfa-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 24px 20px 20px;
+}
+
+.cfa-sidebar-logo-icon {
+  color: var(--cfa-green-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cfa-sidebar-brand-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  letter-spacing: -0.02em;
+}
+
+.cfa-sidebar-nav {
+  padding: 4px 14px;
+  flex: 1;
+}
+
+.cfa-sidebar-nav-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cfa-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: var(--cfa-radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--cfa-text-body);
+  font-size: 13.5px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cfa-nav-item-icon {
+  color: var(--cfa-text-muted);
+  flex-shrink: 0;
+  transition: color 0.15s ease;
+}
+
+.cfa-nav-item:hover {
+  background: #f1f5f9;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-nav-item:hover .cfa-nav-item-icon {
+  color: var(--cfa-text-navy);
+}
+
+.cfa-nav-item.active {
+  background: var(--cfa-green-primary);
+  color: #ffffff;
+}
+
+.cfa-nav-item.active .cfa-nav-item-icon {
+  color: #ffffff;
+}
+
+.cfa-sidebar-divider {
+  height: 1px;
+  background: var(--cfa-border);
+  margin: 12px 6px;
+}
+
+/* Sidebar Footer Cards */
+.cfa-sidebar-footer {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.cfa-sidebar-plan-card {
+  background: var(--cfa-bg-surface-soft);
+  border: 1px solid var(--cfa-border);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.cfa-plan-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.cfa-plan-card-icon {
+  color: var(--cfa-green-primary);
+  display: flex;
+  align-items: center;
+}
+
+.cfa-plan-card-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.cfa-plan-card-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-plan-card-sub {
+  font-size: 10.5px;
+  color: var(--cfa-text-muted);
+}
+
+.cfa-plan-card-progress {
+  height: 4px;
+  background: var(--cfa-border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 6px 0;
+}
+
+.cfa-plan-card-progress-fill {
+  height: 100%;
+  background: var(--cfa-green-primary);
+  border-radius: 2px;
+}
+
+.cfa-plan-card-days {
+  font-size: 10.5px;
+  color: var(--cfa-text-muted);
+}
+
+.cfa-sidebar-quote-card {
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.cfa-sidebar-quote-text {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.45;
+}
+
+/* --------------------------------------------------------------------------
+   HEADER
+   -------------------------------------------------------------------------- */
+.cfa-main-layout {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cfa-header {
+  height: var(--cfa-header-height);
+  background: #ffffff;
+  border-bottom: 1px solid var(--cfa-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.cfa-header-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 380px;
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: var(--cfa-radius-sm);
+  padding: 0 10px 0 12px;
+  height: 38px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cfa-header-search:focus-within {
+  border-color: var(--cfa-green-primary);
+  box-shadow: 0 0 0 3px rgba(13, 123, 95, 0.1);
+}
+
+.cfa-search-icon {
+  color: var(--cfa-text-light);
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.cfa-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-search-input::placeholder {
+  color: var(--cfa-text-light);
+}
+
+.cfa-search-kbd {
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--cfa-text-muted);
+  background: var(--cfa-bg-surface-soft);
+  border: 1px solid var(--cfa-border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin-left: 8px;
+}
+
+.cfa-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.cfa-bell-btn {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--cfa-text-body);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 50%;
+  transition: background 0.15s ease;
+}
+
+.cfa-bell-btn:hover {
+  background: #f1f5f9;
+}
+
+.cfa-bell-dot {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  width: 7px;
+  height: 7px;
+  background-color: #ef4444;
+  border: 1.5px solid #ffffff;
+  border-radius: 50%;
+}
+
+.cfa-user-profile-wrapper {
+  position: relative;
+}
+
+.cfa-user-profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.cfa-user-profile-btn:hover {
+  background: #f1f5f9;
+}
+
+.cfa-user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cfa-avatar-fallback {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.cfa-user-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-user-chevron {
+  color: var(--cfa-text-muted);
+}
+
+/* User profile dropdown */
+.cfa-profile-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 200px;
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: 10px;
+  box-shadow: var(--cfa-shadow-dropdown);
+  padding: 6px;
+  z-index: 50;
+}
+
+.cfa-profile-info {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cfa-profile-display-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-profile-email {
+  font-size: 11px;
+  color: var(--cfa-text-muted);
+}
+
+.cfa-profile-divider {
+  height: 1px;
+  background: var(--cfa-border);
+  margin: 4px 0;
+}
+
+.cfa-profile-menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  border: none;
+  background: none;
+  border-radius: 6px;
+  font-size: 12.5px;
+  color: var(--cfa-text-body);
+  cursor: pointer;
+  text-align: left;
+}
+
+.cfa-profile-menu-item:hover {
+  background: #f1f5f9;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-profile-menu-item.logout {
+  color: #ef4444;
+}
+
+.cfa-profile-menu-item.logout:hover {
+  background: #fef2f2;
+}
+
+/* --------------------------------------------------------------------------
+   MAIN DASHBOARD CONTENT AREA
+   -------------------------------------------------------------------------- */
+.cfa-dashboard-content {
+  position: relative;
+  max-width: 1536px;
+  padding: 24px 32px 48px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Data Notice / Fallback */
+.cfa-dashboard-data-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #fffbeb;
+  border: 1px solid #fef08a;
+  border-radius: 10px;
+  padding: 10px 16px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #854d0e;
+  position: relative;
+  z-index: 2;
+}
+
+.cfa-data-notice-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.cfa-notice-btn {
+  background: #ffffff;
+  border: 1px solid #fde047;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #713f12;
+  cursor: pointer;
+}
+
+.cfa-notice-btn:hover {
+  background: #fefce8;
+}
+
+/* --------------------------------------------------------------------------
+   GREETING SECTION
+   -------------------------------------------------------------------------- */
+.cfa-greeting-section {
+  position: relative;
+  margin-bottom: 22px;
+  min-height: 96px;
+  display: flex;
+  align-items: center;
+}
+
+/* Atmospheric mountain sunrise background behind greeting */
+.cfa-greeting-bg-visual {
+  position: absolute;
+  top: -24px;
+  right: -32px;
+  width: 58%;
+  height: 160px;
+  background-image: url("/dashboard-mountain.png");
+  background-size: cover;
+  background-position: right 30%;
+  background-repeat: no-repeat;
+  opacity: 0.42;
+  mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.4) 30%, rgba(0, 0, 0, 0.95) 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.4) 30%, rgba(0, 0, 0, 0.95) 85%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cfa-greeting-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.cfa-greeting-date {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cfa-text-muted);
+  margin-bottom: 4px;
+}
+
+.cfa-greeting-heading {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  margin: 0 0 4px;
+  letter-spacing: -0.025em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cfa-wave-emoji {
+  display: inline-block;
+  font-size: 26px;
+}
+
+.cfa-greeting-subtitle {
+  font-size: 13.5px;
+  color: var(--cfa-text-muted);
+  margin: 0;
+}
+
+.cfa-greeting-badges {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cfa-level-selector-wrapper {
+  position: relative;
+}
+
+.cfa-greeting-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: 12px;
+  padding: 8px 16px;
+  box-shadow: var(--cfa-shadow-card);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cfa-greeting-card:hover {
+  border-color: #cbd5e1;
+}
+
+.cfa-greeting-card-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cfa-greeting-card-icon.green {
+  color: var(--cfa-green-primary);
+}
+
+.cfa-greeting-card-icon.neutral {
+  color: var(--cfa-text-navy);
+}
+
+.cfa-greeting-card-details {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.cfa-greeting-card-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  line-height: 1.25;
+}
+
+.cfa-greeting-card-sub {
+  font-size: 11px;
+  color: var(--cfa-text-light);
+  line-height: 1.2;
+}
+
+.cfa-greeting-card-chevron {
+  color: var(--cfa-text-muted);
+  margin-left: 4px;
+}
+
+/* Level Dropdown */
+.cfa-level-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: 10px;
+  box-shadow: var(--cfa-shadow-dropdown);
+  padding: 6px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cfa-level-dropdown-item {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--cfa-text-body);
+  text-align: left;
+  cursor: pointer;
+}
+
+.cfa-level-dropdown-item:hover,
+.cfa-level-dropdown-item.selected {
+  background: var(--cfa-bg-green-soft);
+  color: var(--cfa-green-primary);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   SHARED CARD COMPONENT STYLES
+   -------------------------------------------------------------------------- */
+.cfa-card {
+  background: var(--cfa-bg-card);
+  border: 1px solid var(--cfa-border);
+  border-radius: var(--cfa-radius-card);
+  padding: 22px;
+  box-shadow: var(--cfa-shadow-card);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.cfa-card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.cfa-header-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cfa-icon-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cfa-icon-badge.green {
+  background: var(--cfa-bg-green-soft);
+  color: var(--cfa-green-primary);
+}
+
+.cfa-header-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.cfa-card-heading {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  margin: 0;
+  letter-spacing: -0.015em;
+}
+
+.cfa-card-subheading {
+  font-size: 12px;
+  color: var(--cfa-text-muted);
+  margin: 2px 0 0;
+}
+
+.cfa-card-action-link {
+  background: none;
+  border: none;
+  color: var(--cfa-green-primary);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cfa-card-action-link:hover {
+  text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   GRID LAYOUTS
+   Row 1 balanced: ~45% / ~27.5% / ~27.5%
+   -------------------------------------------------------------------------- */
+.cfa-grid-row-1 {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1.05fr) minmax(0, 1.05fr);
+  gap: 16px;
+  margin-bottom: 16px;
+  align-items: stretch;
+}
+
+.cfa-grid-row-2,
+.cfa-grid-row-3 {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+/* --------------------------------------------------------------------------
+   CARD: TODAY'S STUDY PLAN
+   -------------------------------------------------------------------------- */
+.cfa-study-plan-card {
+  height: 100%;
+}
+
+.cfa-header-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.cfa-study-time-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cfa-time-badge-icon {
+  color: var(--cfa-green-primary);
+  display: flex;
+  align-items: center;
+}
+
+.cfa-time-badge-text {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.cfa-time-badge-hours {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  line-height: 1.2;
+}
+
+.cfa-time-badge-label {
+  font-size: 10.5px;
+  color: var(--cfa-text-muted);
+}
+
+.cfa-more-menu-container {
+  position: relative;
+}
+
+.cfa-icon-btn {
+  background: none;
+  border: none;
+  color: var(--cfa-text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cfa-icon-btn:hover {
+  background: #f1f5f9;
+  color: var(--cfa-text-navy);
+}
+
+/* Dropdown Menu */
+.cfa-dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  width: 190px;
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: 10px;
+  box-shadow: var(--cfa-shadow-dropdown);
+  padding: 6px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cfa-dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: none;
+  background: none;
+  border-radius: 6px;
+  font-size: 12.5px;
+  color: var(--cfa-text-body);
+  cursor: pointer;
+  text-align: left;
+}
+
+.cfa-dropdown-item:hover {
+  background: #f1f5f9;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-dropdown-item-icon {
+  color: var(--cfa-text-muted);
+  display: flex;
+}
+
+/* Task List */
+.cfa-task-list {
+  border: 1px solid var(--cfa-border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  background: #ffffff;
+}
+
+.cfa-task-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--cfa-border-soft);
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.cfa-task-row:last-child {
+  border-bottom: none;
+}
+
+.cfa-task-row:hover {
+  background: #f8fafc;
+}
+
+.cfa-task-indicator {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.cfa-task-check-icon {
+  color: var(--cfa-green-primary);
+}
+
+.cfa-task-circle-icon {
+  color: #cbd5e1;
+}
+
+.cfa-task-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cfa-task-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cfa-task-desc {
+  font-size: 11px;
+  color: var(--cfa-text-muted);
+  margin-top: 2px;
+}
+
+.cfa-task-duration {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  color: var(--cfa-text-muted);
+  flex-shrink: 0;
+}
+
+.cfa-task-chevron {
+  color: var(--cfa-text-light);
+}
+
+/* Primary Button Large */
+.cfa-btn-primary-large {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--cfa-green-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--cfa-radius-sm);
+  padding: 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: auto;
+  transition: background 0.15s ease;
+}
+
+.cfa-btn-primary-large:hover {
+  background: var(--cfa-green-hover);
+}
+
+.cfa-btn-arrow {
+  font-size: 15px;
+  line-height: 1;
+}
+
+/* --------------------------------------------------------------------------
+   CARD: YOUR CFA PROGRESS
+   -------------------------------------------------------------------------- */
+.cfa-progress-card {
+  height: 100%;
+}
+
+.cfa-progress-card .cfa-card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.cfa-progress-card .cfa-card-heading {
+  white-space: nowrap;
+}
+
+.cfa-progress-card .cfa-card-action-link {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cfa-mastery-gauge-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 6px 0 14px;
+}
+
+.cfa-mastery-svg-container {
+  position: relative;
+  width: 116px;
+  height: 116px;
+}
+
+.cfa-mastery-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.cfa-mastery-track {
+  fill: none;
+  stroke: #f1f5f9;
+}
+
+.cfa-mastery-fill {
+  fill: none;
+  stroke: var(--cfa-green-primary);
+  transition: stroke-dashoffset 0.6s ease;
+}
+
+.cfa-mastery-center-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.cfa-mastery-percentage {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  line-height: 1;
+}
+
+.cfa-mastery-label {
+  font-size: 10.5px;
+  color: var(--cfa-text-muted);
+  margin-top: 4px;
+}
+
+/* Category Bars */
+.cfa-progress-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.cfa-category-row {
+  display: grid;
+  grid-template-columns: 58px 1fr 32px;
+  align-items: center;
+  gap: 8px;
+}
+
+.cfa-category-name {
+  font-size: 11.5px;
+  color: var(--cfa-text-body);
+  font-weight: 500;
+}
+
+.cfa-category-bar-track {
+  height: 6px;
+  background: #f1f5f9;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.cfa-category-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.cfa-category-bar-fill.learning {
+  background: #0d7b5f;
+}
+
+.cfa-category-bar-fill.practice {
+  background: #2563eb;
+}
+
+.cfa-category-bar-fill.revision {
+  background: #7c3aed;
+}
+
+.cfa-category-bar-fill.mocks {
+  background: #f97316;
+}
+
+.cfa-category-pct {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+  text-align: right;
+}
+
+/* Bottom Stats Grid */
+.cfa-progress-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  border-top: 1px solid var(--cfa-border);
+  padding-top: 12px;
+  margin-top: auto;
+}
+
+.cfa-stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.cfa-stat-icon-wrapper {
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.cfa-stat-icon-wrapper.flame {
+  color: #ea580c;
+}
+
+.cfa-stat-icon-wrapper.green {
+  color: var(--cfa-green-primary);
+}
+
+.cfa-stat-value {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  line-height: 1.2;
+}
+
+.cfa-stat-label {
+  font-size: 9.5px;
+  color: var(--cfa-text-muted);
+  line-height: 1.25;
+  margin-top: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   CARD: ASK YOUR CFA AI
+   Fixed to keep all UI cleanly inside the card without overflow
+   -------------------------------------------------------------------------- */
+.cfa-ai-card {
+  height: 100%;
+  background: #ffffff;
+  padding: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cfa-ai-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cfa-ai-badge {
+  background: var(--cfa-bg-green-soft);
+  color: var(--cfa-green-primary);
+}
+
+.cfa-ai-description {
+  font-size: 12px;
+  color: var(--cfa-text-muted);
+  line-height: 1.45;
+  margin: 0 0 12px;
+}
+
+.cfa-ai-input-form {
+  margin-bottom: 12px;
+}
+
+.cfa-ai-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: var(--cfa-radius-sm);
+  padding: 0 10px 0 12px;
+  height: 38px;
+  transition: border-color 0.15s ease;
+}
+
+.cfa-ai-input-wrapper:focus-within {
+  border-color: var(--cfa-green-primary);
+  box-shadow: 0 0 0 3px rgba(13, 123, 95, 0.1);
+}
+
+.cfa-ai-text-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 12px;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-ai-text-input::placeholder {
+  color: var(--cfa-text-light);
+}
+
+.cfa-ai-send-btn {
+  background: none;
+  border: none;
+  color: var(--cfa-text-light);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease;
+}
+
+.cfa-ai-send-btn:hover {
+  color: var(--cfa-green-primary);
+}
+
+.cfa-ai-preview-notice {
+  font-size: 11px;
+  color: #854d0e;
+  background: #fefce8;
+  border: 1px solid #fef08a;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-bottom: 10px;
+}
+
+.cfa-ai-quick-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: auto;
+  padding-bottom: 2px;
+}
+
+.cfa-ai-action-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: var(--cfa-radius-sm);
+  padding: 8px 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  min-height: 36px;
+}
+
+.cfa-ai-action-chip:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.cfa-action-chip-icon {
+  color: var(--cfa-green-primary);
+  flex-shrink: 0;
+}
+
+.cfa-action-chip-text {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--cfa-text-navy);
+  line-height: 1.25;
+}
+
+/* --------------------------------------------------------------------------
+   CARD: CONTINUE LEARNING
+   -------------------------------------------------------------------------- */
+.cfa-continue-learning-card {
+  min-height: 250px;
+}
+
+.cfa-continue-learning-body {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.cfa-lesson-thumbnail-wrapper {
+  width: 110px;
+  height: 110px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #e2e8f0;
+}
+
+.cfa-lesson-thumbnail-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cfa-lesson-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cfa-lesson-subject {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--cfa-text-muted);
+}
+
+.cfa-lesson-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  margin: 3px 0 8px;
+  letter-spacing: -0.015em;
+}
+
+.cfa-lesson-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.cfa-lesson-progress-track {
+  flex: 1;
+  height: 6px;
+  background: #f1f5f9;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.cfa-lesson-progress-fill {
+  height: 100%;
+  background: var(--cfa-green-primary);
+  border-radius: 3px;
+}
+
+.cfa-lesson-progress-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-lesson-desc {
+  font-size: 12px;
+  color: var(--cfa-text-muted);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.cfa-lesson-btn {
+  margin-top: auto;
+}
+
+/* --------------------------------------------------------------------------
+   CARD: YOUR WEAK AREAS
+   -------------------------------------------------------------------------- */
+.cfa-weak-areas-card {
+  min-height: 250px;
+}
+
+.cfa-weak-topics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.cfa-weak-topic-row {
+  display: grid;
+  grid-template-columns: 130px 1fr 34px;
+  align-items: center;
+  gap: 12px;
+}
+
+.cfa-weak-topic-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cfa-severity-badge {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.cfa-severity-badge.red {
+  background-color: #ef4444;
+}
+
+.cfa-severity-badge.red-orange {
+  background-color: #f87171;
+}
+
+.cfa-severity-badge.amber {
+  background-color: #f59e0b;
+}
+
+.cfa-severity-badge.yellow {
+  background-color: #eab308;
+}
+
+.cfa-weak-topic-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+  white-space: nowrap;
+}
+
+.cfa-weak-bar-track {
+  height: 6px;
+  background: #f1f5f9;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.cfa-weak-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.cfa-weak-bar-fill.red {
+  background: #ef4444;
+}
+
+.cfa-weak-bar-fill.red-orange {
+  background: #f87171;
+}
+
+.cfa-weak-bar-fill.amber {
+  background: #f59e0b;
+}
+
+.cfa-weak-bar-fill.yellow {
+  background: #eab308;
+}
+
+.cfa-weak-topic-pct {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+  text-align: right;
+}
+
+/* Recommendation Box */
+.cfa-weak-recommendation-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fefce8;
+  border: 1px solid #fef08a;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: auto;
+}
+
+.cfa-recommendation-icon {
+  color: #ca8a04;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.cfa-recommendation-text {
+  font-size: 12px;
+  color: #713f12;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+   CARD: THIS WEEK
+   -------------------------------------------------------------------------- */
+.cfa-this-week-card {
+  min-height: 240px;
+}
+
+.cfa-week-stats-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.cfa-week-study-hours-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.cfa-week-stat-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-week-stat-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cfa-green-primary);
+  margin-top: 2px;
+}
+
+.cfa-week-stat-slash {
+  color: var(--cfa-text-muted);
+  font-weight: 500;
+}
+
+.cfa-week-goal-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.cfa-week-goal-title {
+  font-size: 11px;
+  color: var(--cfa-text-muted);
+  margin-bottom: 4px;
+}
+
+.cfa-week-mini-ring-wrapper {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cfa-mini-ring-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.cfa-mini-ring-track {
+  fill: none;
+  stroke: #f1f5f9;
+}
+
+.cfa-mini-ring-fill {
+  fill: none;
+  stroke: var(--cfa-green-primary);
+}
+
+.cfa-mini-ring-text {
+  position: absolute;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-week-goal-fraction {
+  font-size: 10px;
+  color: var(--cfa-text-muted);
+  margin-top: 2px;
+}
+
+/* Chart */
+.cfa-week-chart-container {
+  display: flex;
+  gap: 12px;
+  height: 110px;
+  margin-top: auto;
+}
+
+.cfa-chart-y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 22px;
+  height: 85px;
+}
+
+.cfa-y-tick {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  color: var(--cfa-text-light);
+  line-height: 1;
+  position: relative;
+}
+
+.cfa-chart-bars-area {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 1px solid var(--cfa-border);
+  padding-bottom: 24px;
+  position: relative;
+}
+
+.cfa-chart-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 14%;
+  height: 85px;
+  position: relative;
+}
+
+.cfa-chart-bar-slot {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.cfa-chart-bar-rect {
+  width: 14px;
+  background: var(--cfa-green-primary);
+  border-radius: 3px 3px 0 0;
+  transition: height 0.3s ease;
+}
+
+.cfa-chart-bar-rect:hover {
+  background: var(--cfa-green-hover);
+}
+
+.cfa-chart-x-label {
+  position: absolute;
+  bottom: -22px;
+  font-size: 10.5px;
+  color: var(--cfa-text-muted);
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   CARD: MOTIVATIONAL BANNER
+   -------------------------------------------------------------------------- */
+.cfa-motivational-banner {
+  min-height: 240px;
+  background-size: cover;
+  background-position: right center;
+  background-repeat: no-repeat;
+  padding: 0;
+  overflow: hidden;
+}
+
+.cfa-motivational-overlay {
+  width: 100%;
+  height: 100%;
+  min-height: 240px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.88) 38%, rgba(255, 255, 255, 0.1) 75%, transparent 100%);
+  display: flex;
+  align-items: center;
+  padding: 24px 28px;
+}
+
+.cfa-motivational-content {
+  max-width: 270px;
+}
+
+.cfa-motivational-headline {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  margin: 0 0 6px;
+  letter-spacing: -0.015em;
+}
+
+.cfa-motivational-subtitle {
+  font-size: 12.5px;
+  color: #475569;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.cfa-motivational-accent-line {
+  width: 32px;
+  height: 3px;
+  background-color: var(--cfa-green-primary);
+  border-radius: 2px;
+  margin-top: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE LAYOUTS
+   -------------------------------------------------------------------------- */
+@media (max-width: 1280px) {
+  .cfa-grid-row-1 {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 1100px) {
+  .cfa-grid-row-1 {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cfa-ai-card {
+    grid-column: span 2;
+  }
+  .cfa-greeting-bg-visual {
+    width: 45%;
+    opacity: 0.3;
+  }
+}
+
+@media (max-width: 900px) {
+  .cfa-sidebar {
+    width: 72px;
+    padding: 0;
+  }
+  .cfa-sidebar-brand-name,
+  .cfa-nav-item-label,
+  .cfa-sidebar-footer {
+    display: none;
+  }
+  .cfa-sidebar-brand {
+    justify-content: center;
+    padding: 20px 0;
+  }
+  .cfa-nav-item {
+    justify-content: center;
+    padding: 12px;
+  }
+  .cfa-header {
+    padding: 0 20px;
+  }
+  .cfa-header-search {
+    width: 240px;
+  }
+  .cfa-dashboard-content {
+    padding: 20px 20px 40px;
+  }
+  .cfa-grid-row-2,
+  .cfa-grid-row-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .cfa-dashboard-shell {
+    flex-direction: column;
+  }
+  .cfa-sidebar {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid var(--cfa-border);
+  }
+  .cfa-sidebar-nav {
+    display: flex;
+    overflow-x: auto;
+    padding: 8px;
+    gap: 6px;
+  }
+  .cfa-sidebar-nav-section {
+    flex-direction: row;
+    gap: 4px;
+  }
+  .cfa-sidebar-divider {
+    display: none;
+  }
+  .cfa-nav-item {
+    width: auto;
+    white-space: nowrap;
+  }
+  .cfa-nav-item-label {
+    display: inline;
+  }
+  .cfa-greeting-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .cfa-greeting-badges {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .cfa-greeting-card {
+    flex: 1;
+    min-width: 180px;
+  }
+  .cfa-grid-row-1 {
+    grid-template-columns: 1fr;
+  }
+  .cfa-ai-card {
+    grid-column: span 1;
+  }
+  .cfa-continue-learning-body {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .cfa-lesson-thumbnail-wrapper {
+    width: 100%;
+    height: 140px;
+  }
+}
