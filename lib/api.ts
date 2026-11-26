@@ -1,4 +1,8 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:4000";
+export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? (
+  typeof window === "undefined"
+    ? "http://localhost:4000"
+    : `http://${window.location.hostname}:4000`
+);
 
 export async function apiRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
   const headers = new Headers(init.headers);
