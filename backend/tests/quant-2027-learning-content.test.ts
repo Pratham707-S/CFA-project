@@ -31,6 +31,11 @@ describe("CFA Level I 2027 Quant draft learning content", () => {
         title: "Continuous uniform distribution (for the CFA Level 1 exam)",
         channel: "Let me explain",
       }),
+      expect.objectContaining({
+        id: "wsQjzW2De9o",
+        title: expect.stringContaining("Learning Module 6"),
+        channel: "AnalystPrep",
+      }),
     ]);
   });
 });

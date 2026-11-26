@@ -55,6 +55,7 @@ export const quant2027LearningContent = [
     learningObjectives: ["Work with unconditional and conditional distribution moments and apply Bayesian updating to investment problems."],
     videos: [
       { id: "JrXRXgi2M-s", title: "Continuous uniform distribution (for the CFA Level 1 exam)", channel: "Let me explain", channelUrl: "https://www.youtube.com/@letmeexplaincfa" },
+      { id: "wsQjzW2De9o", title: "Statistical Distribution for Financial Asset Prices and Returns Part II (2027 CFA Level I – Quantitative Methods – Learning Module 6)", channel: "AnalystPrep", channelUrl: "https://www.youtube.com/@AnalystPrep" },
     ],
   },
   {
