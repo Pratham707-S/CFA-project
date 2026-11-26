@@ -14,6 +14,7 @@ import {
 interface LessonOverviewProps {
   lessonTitle: string;
   duration?: string;
+  youtubeVideoId?: string;
   keyConcepts: string[];
   quickNote: string;
   isCompleted?: boolean;
@@ -25,6 +26,7 @@ interface LessonOverviewProps {
 export function LessonOverview({
   lessonTitle,
   duration = "18 min",
+  youtubeVideoId,
   keyConcepts,
   quickNote,
   isCompleted = false,
@@ -35,7 +37,7 @@ export function LessonOverview({
   return (
     <div className="cfa-lesson-overview-content">
       {/* 1. Video Player */}
-      <VideoPlayer title={lessonTitle} duration={duration} />
+      <VideoPlayer title={lessonTitle} duration={duration} youtubeVideoId={youtubeVideoId} />
 
       {/* 2. Key Concepts Card */}
       <div className="cfa-learn-concept-card">
