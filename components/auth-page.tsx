@@ -21,8 +21,13 @@ export function AuthPage() {
       const response = await fetch(`${API_URL}/auth/${isSignUp ? "signup" : "signin"}`, { method: "POST", credentials: "include", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error?.message ?? "Authentication failed.");
-      setSuccessMessage(isSignUp ? "Account created. Opening your CFA profile…" : "Signed in successfully. Opening your plan…");
-      window.setTimeout(() => router.push("/onboarding"), 250);
+      if (isSignUp) {
+        setSuccessMessage("Account created. Please sign in to continue to your CFA profile.");
+        window.setTimeout(() => router.push("/login"), 250);
+      } else {
+        setSuccessMessage("Signed in successfully. Opening your CFA profile…");
+        window.setTimeout(() => router.push("/onboarding"), 250);
+      }
     } catch (error) { setErrorMessage(error instanceof Error ? error.message : "Something went wrong. Please try again."); } finally { setIsLoading(false); }
   }
 
