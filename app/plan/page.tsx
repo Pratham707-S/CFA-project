@@ -58,7 +58,7 @@ const previewData: DashboardData = {
 
 export default function MyCfaPlanPage() {
   const router = useRouter();
-  const [data, setData] = useState<DashboardData | null>(null);
+  const [data, setData] = useState<DashboardData>(previewData);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState<PlanTab>("overview");
   const [selectedLevel, setSelectedLevel] = useState("CFA Level I");
@@ -72,7 +72,6 @@ export default function MyCfaPlanPage() {
 
   const loadPlanData = () => {
     setError("");
-    setData(null);
     apiRequest<DashboardData>("/dashboard")
       .then((result) => {
         setData(result);
@@ -100,21 +99,12 @@ export default function MyCfaPlanPage() {
             ? reason.message
             : "Could not load plan data."
         );
-        setData(previewData);
       });
   };
 
   useEffect(() => {
     loadPlanData();
   }, []);
-
-  if (!data) {
-    return (
-      <main className="cfa-dashboard-shell">
-        <div className="cfa-dashboard-loading">Loading your CFA Plan…</div>
-      </main>
-    );
-  }
 
   const fullName = data.user.displayName || "Pratham Sharma";
   const userEmail = data.user.email || "student@cfaprep.io";

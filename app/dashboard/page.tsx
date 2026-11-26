@@ -47,14 +47,13 @@ const previewData: DashboardData = {
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [data, setData] = useState<DashboardData | null>(null);
+  const [data, setData] = useState<DashboardData>(previewData);
   const [error, setError] = useState("");
   const [currentNav, setCurrentNav] = useState("Dashboard");
   const [selectedLevel, setSelectedLevel] = useState("CFA Level I");
 
   const loadDashboard = () => {
     setError("");
-    setData(null);
     apiRequest<DashboardData>("/dashboard")
       .then((result) => {
         setData(result);
@@ -68,23 +67,12 @@ export default function DashboardPage() {
             ? reason.message
             : "Could not load your dashboard."
         );
-        setData(previewData);
       });
   };
 
   useEffect(() => {
     loadDashboard();
   }, []);
-
-  if (!data) {
-    return (
-      <main className="cfa-dashboard-shell">
-        <div className="cfa-dashboard-loading">
-          Loading your CFA dashboard…
-        </div>
-      </main>
-    );
-  }
 
   // Derived user values
   const fullName = data.user.displayName || "Pratham Sharma";
