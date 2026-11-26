@@ -605,6 +605,65 @@
   object-fit: cover;
 }
 
+.cfa-youtube-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.cfa-learn-data-status {
+  margin: 0 0 12px;
+  color: #52627a;
+  font-size: 13px;
+}
+
+.cfa-learn-module-lessons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.cfa-learn-module-lessons button,
+.cfa-learn-admin-video button {
+  border: 1px solid #dbe5e2;
+  border-radius: 8px;
+  background: #fff;
+  color: #075f4a;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.cfa-learn-module-lessons button[aria-pressed="true"] {
+  background: #e8f5f0;
+  border-color: #0d7b5f;
+}
+
+.cfa-learn-admin-video {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0;
+  padding: 14px;
+  border: 1px solid #dbe5e2;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.cfa-learn-admin-video label {
+  display: grid;
+  gap: 6px;
+  color: #334155;
+  font-size: 13px;
+}
+
+.cfa-learn-admin-video input {
+  min-height: 38px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  padding: 6px 10px;
+}
+
 /* Video Poster Artwork */
 .cfa-video-poster-art {
   width: 100%;
