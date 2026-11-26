@@ -4,7 +4,7 @@ export type AuthUser = {
   id: string;
   email: string;
   displayName: string | null;
-  role: "STUDENT";
+  role: "STUDENT" | "ADMIN";
 };
 
 export type StoredAuthUser = AuthUser & { passwordHash: string };
