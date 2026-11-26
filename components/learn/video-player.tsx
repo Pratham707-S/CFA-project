@@ -17,6 +17,7 @@ interface VideoPlayerProps {
   title?: string;
   duration?: string;
   videoSrc?: string;
+  youtubeVideoId?: string;
   onEnded?: () => void;
 }
 
@@ -24,6 +25,7 @@ export function VideoPlayer({
   title = "Time Value of Money",
   duration = "18 min",
   videoSrc,
+  youtubeVideoId,
   onEnded,
 }: VideoPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -148,7 +150,17 @@ export function VideoPlayer({
         className="cfa-video-viewport"
         onMouseEnter={() => setShowControls(true)}
       >
-        {videoSrc ? (
+        {youtubeVideoId ? (
+          <iframe
+            className="cfa-youtube-frame"
+            src={`https://www.youtube-nocookie.com/embed/${encodeURIComponent(youtubeVideoId)}`}
+            title={title}
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        ) : videoSrc ? (
           <video
             ref={videoRef}
             src={videoSrc}
@@ -193,7 +205,7 @@ export function VideoPlayer({
                 {isPlaying ? (
                   <Pause size={28} fill="#0d7b5f" color="#0d7b5f" />
                 ) : (
-                  <Play size={28} fill="#0d7b5f" color="#0d7b5f" style={{ marginLeft: 4 }} />
+                  <Play size={28} fill="#0d7b5f" color="#0d7b5f" />
                 )}
               </button>
             </div>
@@ -258,7 +270,7 @@ export function VideoPlayer({
         )}
 
         {/* Video Control Bar */}
-        <div className={`cfa-video-controls ${showControls ? "visible" : ""}`}>
+        {!youtubeVideoId && <div className={`cfa-video-controls ${showControls ? "visible" : ""}`}>
           {/* Progress Timeline Slider */}
           <div className="cfa-video-progress-bar-wrap">
             <input
@@ -362,7 +374,7 @@ export function VideoPlayer({
               </button>
             </div>
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   );
