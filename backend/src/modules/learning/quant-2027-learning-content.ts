@@ -1,0 +1,119 @@
+/**
+ * Platform-authored reading-level lesson names, derived from CFA Institute's
+ * public 2027 Level I Quantitative Methods outline. These are not CFA lesson
+ * titles. Video records are research candidates and must remain review-pending.
+ */
+export const quant2027LearningContent = [
+  {
+    moduleSlug: "returns-of-financial-assets-and-instruments",
+    subtopicTitle: "Reading overview",
+    lessonTitle: "Measuring and interpreting investment returns",
+    lessonSlug: "measuring-investment-returns",
+    learningObjectives: ["Describe return measures and relate required returns to risk-free rates, risk premia, and inflation."],
+    videos: [{ id: "4ypVDY7lMkw", title: "Returns of Financial Assets and Instruments (2027 CFA Level I Exam – QM – Module 1)", channel: "AnalystPrep", channelUrl: "https://www.youtube.com/@AnalystPrep" }],
+  },
+  {
+    moduleSlug: "types-of-financial-returns",
+    subtopicTitle: "Reading overview",
+    lessonTitle: "Comparing return measures across investments",
+    lessonSlug: "comparing-financial-return-measures",
+    learningObjectives: ["Compare return measures used for financial assets, instruments, and indicators."],
+    videos: [{ id: "C1K5tMQNcb4", title: "Types of Financial Return (2027 CFA Level I Exam – QM – Module 2)", channel: "AnalystPrep", channelUrl: "https://www.youtube.com/@AnalystPrep" }],
+  },
+  {
+    moduleSlug: "benchmarking-returns",
+    subtopicTitle: "Reading overview",
+    lessonTitle: "Benchmarking portfolios and calculating index returns",
+    lessonSlug: "benchmarking-portfolios-and-index-returns",
+    learningObjectives: ["Compare money-weighted and time-weighted returns and interpret index construction and returns."],
+    videos: [{ id: "4z0231jJcyw", title: "Benchmarking Returns (2027 CFA Level I Exam – QM – Module 3)", channel: "AnalystPrep", channelUrl: "https://www.youtube.com/@AnalystPrep" }],
+  },
+  {
+    moduleSlug: "time-value-of-money-in-finance",
+    subtopicTitle: "Reading overview",
+    lessonTitle: "Valuing cash flows and implied returns",
+    lessonSlug: "valuing-cash-flows-and-implied-returns",
+    learningObjectives: ["Value fixed-income and equity cash flows and interpret implied returns, growth, and forward values."],
+    videos: [
+      { id: "w_MeobNc4vU", title: "Time Value of Money in Finance Part I (2027 CFA Level I Exam – QM – Module 4)", channel: "AnalystPrep", channelUrl: "https://www.youtube.com/@AnalystPrep" },
+      { id: "ZVVidHoUS0o", title: "Time Value of Money in Finance Part II (2027 CFA Level I Exam – QM – Module 4)", channel: "AnalystPrep", channelUrl: "https://www.youtube.com/@AnalystPrep" },
+    ],
+  },
+  {
+    moduleSlug: "statistical-characteristics-of-asset-returns",
+    subtopicTitle: "Reading overview",
+    lessonTitle: "Summarizing return distributions and risk",
+    lessonSlug: "summarizing-return-distributions-and-risk",
+    learningObjectives: ["Interpret measures of central tendency, dispersion, distribution shape, covariance, correlation, and downside risk."],
+    videos: [{ id: "HqEeW0jihS8", title: "Statistical Characteristics of Asset Returns (2027 CFA Level I Exam – QM – Module 5)", channel: "AnalystPrep", channelUrl: "https://www.youtube.com/@AnalystPrep" }],
+  },
+  {
+    moduleSlug: "statistical-distributions-for-financial-asset-prices-and-returns",
+    subtopicTitle: "Reading overview",
+    lessonTitle: "Applying probability distributions to investment returns",
+    lessonSlug: "probability-distributions-for-investment-returns",
+    learningObjectives: ["Work with unconditional and conditional distribution moments and apply Bayesian updating to investment problems."],
+    videos: [
+      { id: "JrXRXgi2M-s", title: "Continuous uniform distribution (for the CFA Level 1 exam)", channel: "Let me explain", channelUrl: "https://www.youtube.com/@letmeexplaincfa" },
+    ],
+  },
+  {
+    moduleSlug: "estimation-and-hypothesis-testing",
+    subtopicTitle: "Reading overview",
+    lessonTitle: "Estimating parameters and testing investment hypotheses",
+    lessonSlug: "estimating-and-testing-investment-hypotheses",
+    learningObjectives: ["Use sampling and confidence intervals, interpret hypothesis tests, and choose suitable parametric or non-parametric methods."],
+    videos: [
+      { id: "tx6Ii4xOrmY", title: "CFA Level 1 The Central Limit Theorem | Quantitative Methods, Module 7", channel: "Quizara · CFA® Prep" },
+      { id: "q2B_GwuiOfs", title: "CFA Level 1 Confidence Intervals | Quantitative Methods, Module 7", channel: "Quizara · CFA® Prep" },
+      { id: "GlydrDQFPiA", title: "CFA Level 1 Sampling | Quantitative Methods, Module 7", channel: "Quizara · CFA® Prep" },
+      { id: "pYnKrJNRidw", title: "CFA Level 1 Significance, Decision Rules, Type I/II Errors, and Test Power | Quant, Module 7", channel: "Quizara · CFA® Prep" },
+      { id: "g6b4WrITQeY", title: "CFA Level 1 Hypotheses, Test Direction, and Test Statistic Selection | Quant, Module 7", channel: "Quizara · CFA® Prep" },
+      { id: "7Uj8xaMD2kg", title: "CFA Level 1 Parametric vs. Non-Parametric Tests | Quantitative Methods, Module 7", channel: "Quizara · CFA® Prep" },
+      { id: "EcjO_9txkIo", title: "CFA Level 1 Parametric Tests for Multiple Variables | Quantitative Methods, Module 7", channel: "Quizara · CFA® Prep" },
+      { id: "cdMah5_M7JY", title: "CFA Level 1 Parametric Test of Correlations | Quantitative Methods, Module 7", channel: "Quizara · CFA® Prep" },
+      { id: "seWIVk3kmeo", title: "CFA Level 1 Non-Parametric Test for Correlation | Quantitative Methods, Module 7", channel: "Quizara · CFA® Prep" },
+    ],
+  },
+  {
+    moduleSlug: "return-and-risk-of-a-financial-portfolio",
+    subtopicTitle: "Reading overview",
+    lessonTitle: "Balancing portfolio return and risk",
+    lessonSlug: "balancing-portfolio-return-and-risk",
+    learningObjectives: ["Evaluate portfolio return and risk, efficient portfolios, and allocations suited to investor risk preferences."],
+    videos: [
+      { id: "_veHPdb0Xt8", title: "CFA Level 1 (2027): Portfolio Construction and Quantitative Methods — Return and Risk", channel: "Jitendra Rathi Classes - Classes for CFA" },
+      { id: "hOW6VmSJWAE", title: "CFA Level 1 (2027): Portfolio Construction and Quantitative Methods — CAL, CML, SML, CAPM, Sharpe, Beta", channel: "Jitendra Rathi Classes - Classes for CFA" },
+    ],
+  },
+  {
+    moduleSlug: "simulation-of-financial-asset-prices-and-returns",
+    subtopicTitle: "Reading overview",
+    lessonTitle: "Simulating asset prices and investment returns",
+    lessonSlug: "simulating-asset-prices-and-returns",
+    learningObjectives: ["Explain historical simulation, bootstrap resampling, and Monte Carlo simulation in investment applications."],
+    videos: [{ id: "Wd043lZiSeo", title: "Simulation of Financial Asset Prices and Returns (2027 CFA Level I Exam – QM – Module 9)", channel: "AnalystPrep", channelUrl: "https://www.youtube.com/@AnalystPrep" }],
+  },
+  {
+    moduleSlug: "applications-of-simple-linear-regression-in-finance",
+    subtopicTitle: "Reading overview",
+    lessonTitle: "Using linear regression in financial analysis",
+    lessonSlug: "linear-regression-in-financial-analysis",
+    learningObjectives: ["Fit and assess simple regressions, interpret residuals and predictions, and estimate CAPM variables."],
+    videos: [{ id: "JXbxSxpw4mU", title: "Applications of Simple Linear Regression in Finance Part A (2027 CFA Level I Exam – QM – Module 10)", channel: "AnalystPrep", channelUrl: "https://www.youtube.com/@AnalystPrep" }],
+  },
+  {
+    moduleSlug: "introduction-to-financial-data-science",
+    subtopicTitle: "Reading overview",
+    lessonTitle: "Using data science in investment decisions",
+    lessonSlug: "data-science-in-investment-decisions",
+    learningObjectives: ["Describe how big data, machine learning, and artificial intelligence support financial analysis and investment management."],
+    videos: [
+      { id: "5aCgv1hrQRQ", title: "Introduction to Financial Data Science and FinTech (CFA Level I 2027, Reading 11, Lecture 1)", channel: "RBei Classes", channelUrl: "https://www.youtube.com/@rbei7928" },
+      { id: "9f85de6FuDo", title: "Big Data: Structured, Unstructured, and Semistructured (CFA Level I 2027, Reading 11, Lecture 2)", channel: "RBei Classes", channelUrl: "https://www.youtube.com/@rbei7928" },
+      { id: "kqBSUW1ehmA", title: "Alternative Data Sources and IoT in Finance (CFA Level I 2027, Reading 11, Lecture 3)", channel: "RBei Classes", channelUrl: "https://www.youtube.com/@rbei7928" },
+      { id: "BOpsvm8MTNs", title: "Artificial Intelligence and Machine Learning (CFA Level I 2027, Reading 11, Lecture 5)", channel: "RBei Classes", channelUrl: "https://www.youtube.com/@rbei7928" },
+      { id: "PDBejXERYVM", title: "Neural Networks, NLP, LLMs, and AI Risks (CFA Level I 2027, Reading 11, Lecture 8)", channel: "RBei Classes", channelUrl: "https://www.youtube.com/@rbei7928" },
+    ],
+  },
+] as const;
