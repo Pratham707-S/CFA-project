@@ -75,6 +75,7 @@ export default function LearnPage() {
   // Interactive States
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [completedTopicIds, setCompletedTopicIds] = useState<Set<string>>(new Set());
+  const [completedLessonIds, setCompletedLessonIds] = useState<Set<string>>(new Set());
 
   // Current Subject & Topic helpers
   const currentSubject =
@@ -86,9 +87,16 @@ export default function LearnPage() {
       title: "Time Value of Money",
     };
 
-  const isCurrentCompleted = completedTopicIds.has(currentTopic.id);
   const currentLessons = currentTopic.lessons ?? [];
   const currentLesson = currentLessons.find((lesson) => lesson.id === selectedLessonId) ?? currentLessons[0];
+  const isCurrentCompleted = usingLiveCurriculum && currentLesson
+    ? completedLessonIds.has(currentLesson.id)
+    : completedTopicIds.has(currentTopic.id);
+  const visibleCompletedTopicIds = usingLiveCurriculum
+    ? new Set(subjects.flatMap((subject) => subject.topics
+      .filter((topic) => (topic.lessons?.length ?? 0) > 0 && topic.lessons!.every((lesson) => completedLessonIds.has(lesson.id)))
+      .map((topic) => topic.id)))
+    : completedTopicIds;
   const moduleOutcomes = apiSubject?.modules?.find((module) => module.id === currentTopic.id)?.learningOutcomes ?? [];
 
   // Sync profile data if available from backend (with fast fallback)
@@ -157,7 +165,13 @@ export default function LearnPage() {
       .catch(() => { if (active) setLessonVideos([]); });
     apiRequest<{ progress: { lessonCompleted: boolean } | null }>(`/api/lessons/${currentLesson.id}/progress`)
       .then(({ progress }) => {
-        if (active && progress?.lessonCompleted) setCompletedTopicIds((previous) => new Set(previous).add(currentTopic.id));
+        if (!active) return;
+        setCompletedLessonIds((previous) => {
+          const next = new Set(previous);
+          if (progress?.lessonCompleted) next.add(currentLesson.id);
+          else next.delete(currentLesson.id);
+          return next;
+        });
       })
       .catch(() => undefined);
     return () => { active = false; };
@@ -167,7 +181,7 @@ export default function LearnPage() {
     if (usingLiveCurriculum && currentLesson?.id) {
       const complete = !isCurrentCompleted;
       apiRequest(`/api/lessons/${currentLesson.id}/progress`, { method: "POST", body: JSON.stringify({ lessonCompleted: complete }) })
-        .then(() => setCompletedTopicIds((prev) => { const next = new Set(prev); complete ? next.add(currentTopic.id) : next.delete(currentTopic.id); return next; }))
+        .then(() => setCompletedLessonIds((previous) => { const next = new Set(previous); complete ? next.add(currentLesson.id) : next.delete(currentLesson.id); return next; }))
         .catch(() => setCurriculumMessage("Progress could not be saved. Please sign in again and retry."));
       return;
     }
@@ -266,7 +280,7 @@ export default function LearnPage() {
               selectedSubjectId={selectedSubjectId}
               selectedTopicId={selectedTopicId}
               onSelectTopic={handleSelectTopic}
-              completedTopicIds={completedTopicIds}
+              completedTopicIds={visibleCompletedTopicIds}
             />
 
             {/* COLUMN 2: Center Lesson Workspace */}
