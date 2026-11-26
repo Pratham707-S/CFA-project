@@ -20,6 +20,9 @@ import { registerStudyPlanRoutes } from "./modules/study-plan/study-plan.routes.
 import { MemoryDashboardRepository } from "./modules/dashboard/memory-dashboard.repository.js";
 import { PrismaDashboardRepository } from "./modules/dashboard/prisma-dashboard.repository.js";
 import { registerDashboardRoutes } from "./modules/dashboard/dashboard.routes.js";
+import { MemoryLearningRepository } from "./modules/learning/memory-learning.repository.js";
+import { PrismaLearningRepository } from "./modules/learning/prisma-learning.repository.js";
+import { registerLearningRoutes } from "./modules/learning/learning.routes.js";
 
 export function createApp() {
   const app = Fastify({ logger: false });
@@ -39,6 +42,8 @@ export function createApp() {
   registerStudyPlanRoutes(app, studyPlanRepository, authService);
   const dashboardRepository = process.env.DATABASE_URL ? new PrismaDashboardRepository(getPrismaClient()) : new MemoryDashboardRepository();
   registerDashboardRoutes(app, dashboardRepository, authService);
+  const learningRepository = process.env.DATABASE_URL ? new PrismaLearningRepository(getPrismaClient()) : new MemoryLearningRepository();
+  registerLearningRoutes(app, learningRepository, authService);
 
   app.setErrorHandler((error, _request, reply) => {
     if (!(error instanceof HttpError) && !(error instanceof ZodError)) {
