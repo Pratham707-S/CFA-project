@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["partialIndexes"]
 }
 
 datasource db {
@@ -19,6 +20,43 @@ enum StudyPlanStatus {
 
 enum UserRole {
   STUDENT
+  ADMIN
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum VideoVerificationStatus {
+  PENDING_REVIEW
+  VERIFIED
+  UNAVAILABLE
+  REJECTED
+}
+
+enum LearningResourceType {
+  VIDEO
+  ARTICLE
+  DOCUMENT
+  OTHER
+}
+
+enum PracticeQuestionType {
+  MULTIPLE_CHOICE
+}
+
+enum PracticeDifficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum LessonProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
 }
 
 model User {
@@ -33,6 +71,10 @@ model User {
   onboardingPreferences OnboardingPreferences?
   studyPlans            StudyPlan[]
   sessions              Session[]
+  lessonProgress        StudentLessonProgress[]
+  questionAttempts      QuestionAttempt[]
+  weakConcepts          StudentWeakConcept[]
+  verifiedVideos        VideoResource[]          @relation("VideoVerifier")
 }
 
 model Session {
@@ -81,4 +123,247 @@ model StudyPlan {
 
   @@unique([userId, version])
   @@index([userId, status])
+}
+
+model Curriculum {
+  id             String        @id @default(cuid())
+  program        String        @default("CFA")
+  level          CfaLevel
+  curriculumYear Int
+  sourceUrl      String?
+  status         ContentStatus @default(DRAFT)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  subjects       Subject[]
+  learningOutcomeStatements LearningOutcomeStatement[]
+
+  @@unique([program, level, curriculumYear])
+  @@index([program, level, status, curriculumYear])
+}
+
+model Subject {
+  id           String        @id @default(cuid())
+  curriculumId String
+  name         String
+  slug         String
+  description  String?
+  order        Int
+  status       ContentStatus @default(DRAFT)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  curriculum   Curriculum   @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
+  modules      LearningModule[]
+
+  @@unique([curriculumId, slug])
+  @@unique([curriculumId, order])
+  @@index([curriculumId, status, order])
+}
+
+model LearningModule {
+  id                String        @id @default(cuid())
+  subjectId         String
+  title             String
+  slug              String
+  description       String?
+  order             Int
+  learningOutcomes  String[]
+  status            ContentStatus @default(DRAFT)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  subject           Subject       @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  subtopics         Subtopic[]
+
+  @@unique([subjectId, slug])
+  @@unique([subjectId, order])
+  @@index([subjectId, status, order])
+}
+
+model Subtopic {
+  id               String        @id @default(cuid())
+  moduleId         String
+  title            String
+  slug             String
+  description      String?
+  order            Int
+  learningOutcomes String[]
+  status           ContentStatus @default(DRAFT)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  module           LearningModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  lessons          Lesson[]
+  learningOutcomeStatements LearningOutcomeStatement[]
+
+  @@unique([moduleId, slug])
+  @@unique([moduleId, order])
+  @@index([moduleId, status, order])
+}
+
+model LearningOutcomeStatement {
+  id           String        @id @default(cuid())
+  curriculumId String
+  subtopicId   String
+  identifier   String
+  statement    String
+  order        Int
+  sourceUrl    String?
+  sourcePage   String?
+  status       ContentStatus @default(DRAFT)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  curriculum   Curriculum   @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
+  subtopic     Subtopic     @relation(fields: [subtopicId], references: [id], onDelete: Cascade)
+  lessonMappings LessonLearningOutcome[]
+  questionMappings PracticeQuestionLearningOutcome[]
+
+  @@unique([curriculumId, identifier])
+  @@index([subtopicId, status, order])
+}
+
+model Lesson {
+  id                      String        @id @default(cuid())
+  subtopicId              String
+  title                   String
+  slug                    String
+  description             String?
+  learningObjectives      String[]
+  estimatedDurationMinutes Int?
+  order                   Int
+  content                 Json?
+  status                  ContentStatus @default(DRAFT)
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime      @updatedAt
+  subtopic                Subtopic      @relation(fields: [subtopicId], references: [id], onDelete: Cascade)
+  resources               VideoResource[]
+  questions               PracticeQuestion[]
+  studentProgress         StudentLessonProgress[]
+  weakConcepts            StudentWeakConcept[]
+  learningOutcomeMappings LessonLearningOutcome[]
+
+  @@unique([subtopicId, slug])
+  @@unique([subtopicId, order])
+  @@index([subtopicId, status, order])
+}
+
+model LessonLearningOutcome {
+  lessonId                  String
+  learningOutcomeStatementId String
+  order                     Int      @default(1)
+  lesson                    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  learningOutcomeStatement  LearningOutcomeStatement @relation(fields: [learningOutcomeStatementId], references: [id], onDelete: Cascade)
+
+  @@id([lessonId, learningOutcomeStatementId])
+  @@index([learningOutcomeStatementId])
+}
+
+model VideoResource {
+  id                  String                  @id @default(cuid())
+  lessonId            String
+  provider            String                  @default("YOUTUBE")
+  youtubeVideoId      String
+  title               String
+  videoUrl            String
+  embedUrl            String
+  durationSeconds     Int?
+  language            String
+  explanationStyle    String?
+  isPrimary           Boolean                 @default(false)
+  resourceType        LearningResourceType    @default(VIDEO)
+  sourceChannel       String?
+  sourceChannelUrl    String?
+  chapters            Json?
+  verificationStatus VideoVerificationStatus @default(PENDING_REVIEW)
+  verifiedAt          DateTime?
+  verifiedById        String?
+  lastCheckedAt       DateTime?
+  createdAt           DateTime                @default(now())
+  updatedAt           DateTime                @updatedAt
+  lesson              Lesson                  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  verifiedBy          User?                   @relation("VideoVerifier", fields: [verifiedById], references: [id], onDelete: SetNull)
+
+  @@unique([lessonId, youtubeVideoId])
+  @@unique([lessonId], where: { isPrimary: true }, map: "VideoResource_one_primary_per_lesson_key")
+  @@index([lessonId, verificationStatus, isPrimary])
+  @@index([verificationStatus, lastCheckedAt])
+}
+
+model PracticeQuestion {
+  id             String               @id @default(cuid())
+  lessonId       String
+  question       String
+  questionType   PracticeQuestionType @default(MULTIPLE_CHOICE)
+  difficulty     PracticeDifficulty   @default(MEDIUM)
+  options        Json
+  correctAnswer  String
+  explanation    String
+  solutionSteps  Json?
+  concepts       String[]
+  marks          Int                  @default(1)
+  order          Int
+  status         ContentStatus        @default(DRAFT)
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  lesson         Lesson               @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  attempts       QuestionAttempt[]
+  learningOutcomeMappings PracticeQuestionLearningOutcome[]
+
+  @@unique([lessonId, order])
+  @@index([lessonId, status, order])
+}
+
+model PracticeQuestionLearningOutcome {
+  questionId                String
+  learningOutcomeStatementId String
+  question                  PracticeQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  learningOutcomeStatement LearningOutcomeStatement @relation(fields: [learningOutcomeStatementId], references: [id], onDelete: Cascade)
+
+  @@id([questionId, learningOutcomeStatementId])
+  @@index([learningOutcomeStatementId])
+}
+
+model StudentLessonProgress {
+  id                   String               @id @default(cuid())
+  studentId            String
+  lessonId             String
+  status               LessonProgressStatus @default(NOT_STARTED)
+  videoProgressSeconds Int                  @default(0)
+  videoCompleted       Boolean              @default(false)
+  lessonCompleted      Boolean              @default(false)
+  lastAccessedAt       DateTime             @default(now())
+  completedAt          DateTime?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  student              User                 @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  lesson               Lesson               @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, lessonId])
+  @@index([studentId, status, lastAccessedAt])
+}
+
+model QuestionAttempt {
+  id                 String           @id @default(cuid())
+  studentId          String
+  questionId         String
+  selectedAnswer     String
+  isCorrect          Boolean
+  timeTakenSeconds   Int?
+  attemptedAt        DateTime         @default(now())
+  student            User             @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  question           PracticeQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([studentId, attemptedAt])
+  @@index([questionId, studentId, attemptedAt])
+}
+
+model StudentWeakConcept {
+  id          String   @id @default(cuid())
+  studentId   String
+  lessonId    String
+  concept     String
+  mistakeCount Int
+  updatedAt   DateTime @updatedAt
+  student     User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, lessonId, concept])
+  @@index([studentId, mistakeCount, updatedAt])
 }
