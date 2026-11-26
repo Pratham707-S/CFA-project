@@ -1,0 +1,1745 @@
+/* ==========================================================================
+   CFA LEARN PAGE — VIDEO-BASED LEARNING UI
+   Design Tokens & 3-Column Educational Workspace
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   PAGE HEADER & LEVEL SELECTOR
+   -------------------------------------------------------------------------- */
+.cfa-learn-header-container {
+  margin-bottom: 20px;
+}
+
+.cfa-learn-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.cfa-learn-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.cfa-learn-main-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  margin: 0 0 4px;
+  letter-spacing: -0.025em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+.cfa-learn-subtitle {
+  font-size: 13.5px;
+  color: var(--cfa-text-muted);
+  margin: 0;
+}
+
+/* Level Selector Button & Dropdown */
+.cfa-learn-level-wrapper {
+  position: relative;
+}
+
+.cfa-learn-level-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: 10px;
+  padding: 8px 14px;
+  box-shadow: var(--cfa-shadow-card);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cfa-learn-level-btn:hover {
+  border-color: #cbd5e1;
+}
+
+.cfa-learn-level-icon {
+  color: var(--cfa-green-primary);
+  display: flex;
+  align-items: center;
+}
+
+.cfa-learn-level-text {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-learn-level-chevron {
+  color: var(--cfa-text-muted);
+}
+
+.cfa-learn-level-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 170px;
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: 10px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  padding: 6px;
+  z-index: 50;
+}
+
+.cfa-learn-level-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--cfa-text-navy);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.cfa-learn-level-item:hover {
+  background: #f1f5f9;
+}
+
+.cfa-learn-level-item.active {
+  background: var(--cfa-green-light);
+  color: var(--cfa-green-primary);
+  font-weight: 600;
+}
+
+.cfa-learn-level-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cfa-green-primary);
+  margin-left: auto;
+}
+
+/* --------------------------------------------------------------------------
+   THREE-COLUMN LEARNING WORKSPACE
+   -------------------------------------------------------------------------- */
+.cfa-learn-workspace-grid {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   COLUMN 1: CURRICULUM SIDEBAR (~250px)
+   -------------------------------------------------------------------------- */
+.cfa-curriculum-panel {
+  width: 250px;
+  flex-shrink: 0;
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: 12px;
+  box-shadow: var(--cfa-shadow-card);
+  padding: 14px 12px;
+  max-height: calc(100vh - 165px);
+  overflow-y: auto;
+  position: sticky;
+  top: 86px;
+}
+
+.cfa-curriculum-panel::-webkit-scrollbar {
+  width: 5px;
+}
+
+.cfa-curriculum-panel::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+.cfa-curriculum-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 6px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 8px;
+}
+
+.cfa-curriculum-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  letter-spacing: -0.01em;
+}
+
+.cfa-curriculum-collapse-btn {
+  background: transparent;
+  border: none;
+  color: var(--cfa-text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.cfa-curriculum-collapse-btn:hover {
+  background: #f1f5f9;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-curriculum-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cfa-curriculum-subject-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.cfa-curriculum-subject-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 6px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.cfa-curriculum-subject-btn:hover {
+  background: #f8fafc;
+}
+
+.cfa-curriculum-subject-btn.selected-subject {
+  background: #f8fafc;
+}
+
+.cfa-curriculum-subject-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cfa-curriculum-subject-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.cfa-curriculum-subject-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cfa-curriculum-subject-count {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 1px;
+}
+
+.cfa-curriculum-subject-count.has-progress {
+  color: var(--cfa-green-primary);
+  font-weight: 600;
+}
+
+.cfa-curriculum-subject-arrow {
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Sub-topics list */
+.cfa-curriculum-topics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-left: 12px;
+  padding-left: 10px;
+  border-left: 1.5px solid #edf2f7;
+  margin-top: 2px;
+  margin-bottom: 6px;
+}
+
+.cfa-curriculum-topic-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+
+.cfa-curriculum-topic-item:hover {
+  background: #f1f5f9;
+}
+
+.cfa-curriculum-topic-item.active-topic {
+  background: #eaf6f0;
+}
+
+.cfa-curriculum-topic-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.cfa-curriculum-active-play-circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--cfa-green-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(13, 123, 95, 0.3);
+}
+
+.cfa-curriculum-check-circle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #eaf6f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cfa-curriculum-empty-circle {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 1.5px solid #cbd5e1;
+}
+
+.cfa-curriculum-topic-title {
+  font-size: 12px;
+  color: #475569;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.active-topic .cfa-curriculum-topic-title {
+  color: #064e3b;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   COLUMN 2: CENTER WORKSPACE (FLEX 1)
+   -------------------------------------------------------------------------- */
+.cfa-learn-center-workspace {
+  flex: 1;
+  min-width: 0;
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: 14px;
+  padding: 20px 24px 28px;
+  box-shadow: var(--cfa-shadow-card);
+}
+
+/* Breadcrumbs & Actions Row */
+.cfa-learn-breadcrumb-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.cfa-learn-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--cfa-text-muted);
+}
+
+.cfa-breadcrumb-subject {
+  color: var(--cfa-text-muted);
+  font-weight: 500;
+}
+
+.cfa-breadcrumb-sep {
+  color: #94a3b8;
+}
+
+.cfa-breadcrumb-topic {
+  color: var(--cfa-text-navy);
+  font-weight: 600;
+}
+
+.cfa-learn-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cfa-learn-bookmark-btn {
+  background: transparent;
+  border: 1px solid var(--cfa-border);
+  border-radius: 8px;
+  padding: 6px 8px;
+  cursor: pointer;
+  color: var(--cfa-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.cfa-learn-bookmark-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-learn-bookmark-btn.bookmarked {
+  color: var(--cfa-green-primary);
+  border-color: #a7f3d0;
+  background: var(--cfa-green-light);
+}
+
+.cfa-learn-complete-pill-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.cfa-learn-complete-pill-btn:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.cfa-learn-complete-pill-btn.completed {
+  background: var(--cfa-green-light);
+  border-color: #a7f3d0;
+  color: var(--cfa-green-primary);
+}
+
+.cfa-learn-complete-pill-btn.completed svg {
+  color: var(--cfa-green-primary);
+}
+
+/* Lesson Heading */
+.cfa-learn-lesson-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  margin: 0 0 4px;
+  letter-spacing: -0.02em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+.cfa-learn-lesson-desc {
+  font-size: 13.5px;
+  color: var(--cfa-text-muted);
+  margin: 0 0 16px;
+  line-height: 1.45;
+}
+
+/* --------------------------------------------------------------------------
+   LESSON TABS
+   -------------------------------------------------------------------------- */
+.cfa-lesson-tabs-container {
+  border-bottom: 1px solid var(--cfa-border);
+  margin-bottom: 18px;
+}
+
+.cfa-lesson-tabs-list {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.cfa-lesson-tab-btn {
+  background: transparent;
+  border: none;
+  padding: 10px 2px 12px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--cfa-text-muted);
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s ease;
+}
+
+.cfa-lesson-tab-btn:hover {
+  color: var(--cfa-text-navy);
+}
+
+.cfa-lesson-tab-btn.active {
+  color: var(--cfa-green-primary);
+  font-weight: 600;
+}
+
+.cfa-lesson-tab-badge {
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.cfa-lesson-tab-indicator {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: var(--cfa-green-primary);
+  border-radius: 3px 3px 0 0;
+}
+
+/* --------------------------------------------------------------------------
+   VIDEO PLAYER
+   -------------------------------------------------------------------------- */
+.cfa-video-card {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--cfa-border);
+  background: #0f172a;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.cfa-video-top-tag-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--cfa-border);
+}
+
+.cfa-video-lesson-badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-video-badge-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  background: var(--cfa-green-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cfa-video-duration-tag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--cfa-text-muted);
+  font-weight: 600;
+}
+
+.cfa-video-clock-icon {
+  color: #94a3b8;
+}
+
+/* Viewport Area */
+.cfa-video-viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 330px;
+  background: linear-gradient(135deg, #eefaf4 0%, #e0f2fe 100%);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cfa-native-video-elem {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Video Poster Artwork */
+.cfa-video-poster-art {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.cfa-video-art-gradient-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 75% 50%, rgba(52, 211, 153, 0.15) 0%, transparent 60%),
+              radial-gradient(circle at 20% 40%, rgba(14, 165, 233, 0.1) 0%, transparent 50%);
+}
+
+.cfa-video-art-overlay-text {
+  position: absolute;
+  left: 36px;
+  top: 45%;
+  transform: translateY(-50%);
+  max-width: 220px;
+  z-index: 2;
+}
+
+.cfa-video-art-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--cfa-text-navy);
+  line-height: 1.2;
+  margin: 0;
+  letter-spacing: -0.02em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+.cfa-video-central-play-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+}
+
+.cfa-video-central-play-btn {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: none;
+  box-shadow: 0 8px 24px rgba(13, 123, 95, 0.25), 0 2px 6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cfa-video-central-play-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 10px 28px rgba(13, 123, 95, 0.35);
+}
+
+.cfa-video-art-chart-wrap {
+  position: absolute;
+  right: 20px;
+  bottom: 10px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cfa-video-chart-svg {
+  filter: drop-shadow(0 8px 16px rgba(5, 150, 105, 0.15));
+}
+
+/* Controls Bar */
+.cfa-video-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.4) 70%, transparent 100%);
+  padding: 12px 16px 8px;
+  z-index: 10;
+  transition: opacity 0.2s ease;
+}
+
+.cfa-video-progress-bar-wrap {
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+.cfa-video-scrubber {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+
+.cfa-video-scrubber::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.cfa-video-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cfa-video-controls-left,
+.cfa-video-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cfa-video-ctrl-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: opacity 0.15s ease;
+}
+
+.cfa-video-ctrl-btn:hover {
+  opacity: 0.8;
+}
+
+.cfa-video-time-display {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+}
+
+.cfa-video-time-divider {
+  color: #94a3b8;
+}
+
+.cfa-video-time-total {
+  color: #cbd5e1;
+}
+
+.cfa-video-volume-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cfa-video-volume-slider {
+  width: 60px;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #cbd5e1;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.cfa-video-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.cfa-video-speed-wrapper {
+  position: relative;
+}
+
+.cfa-video-speed-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #ffffff;
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cfa-video-speed-dropdown {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  right: 0;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 20;
+}
+
+.cfa-video-speed-option {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.cfa-video-speed-option:hover {
+  background: #334155;
+}
+
+.cfa-video-speed-option.active {
+  background: var(--cfa-green-primary);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   KEY CONCEPTS & QUICK NOTES CARDS
+   -------------------------------------------------------------------------- */
+.cfa-learn-concept-card,
+.cfa-learn-quick-notes-card {
+  margin-bottom: 20px;
+}
+
+.cfa-learn-card-heading-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.cfa-learn-card-icon-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cfa-learn-card-icon-badge.green {
+  background: var(--cfa-green-light);
+}
+
+.cfa-learn-card-icon-badge.blue {
+  background: #eff6ff;
+}
+
+.cfa-learn-card-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+.cfa-learn-concepts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cfa-learn-concept-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-learn-bullet-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cfa-green-primary);
+  flex-shrink: 0;
+}
+
+/* Quick Notes Yellow Box */
+.cfa-learn-quick-notes-banner {
+  background: #fefce8;
+  border: 1px solid #fef08a;
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.cfa-learn-quick-notes-banner.trap-banner {
+  background: #fff7ed;
+  border-color: #ffedd5;
+  margin-top: 20px;
+}
+
+.cfa-learn-quick-notes-bulb {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.cfa-learn-quick-notes-text {
+  font-size: 13px;
+  color: #713f12;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.cfa-trap-title {
+  display: block;
+  font-size: 13px;
+  color: #9a3412;
+  margin-bottom: 2px;
+}
+
+/* Bottom Lesson Navigation */
+.cfa-learn-bottom-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid var(--cfa-border);
+  margin-top: 24px;
+}
+
+.cfa-learn-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cfa-learn-nav-btn:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.cfa-learn-complete-btn-bottom {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--cfa-green-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.cfa-learn-complete-btn-bottom:hover {
+  background: var(--cfa-green-dark);
+}
+
+.cfa-learn-complete-btn-bottom.completed {
+  background: #eaf6f0;
+  color: var(--cfa-green-primary);
+  border: 1px solid #a7f3d0;
+}
+
+/* --------------------------------------------------------------------------
+   COLUMN 3: RIGHT LESSON SUPPORT (~270px)
+   -------------------------------------------------------------------------- */
+.cfa-lesson-right-column {
+  width: 270px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.cfa-resources-card,
+.cfa-related-topics-card {
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: var(--cfa-shadow-card);
+}
+
+.cfa-resources-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  margin: 0 0 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+/* Resources List */
+.cfa-resources-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cfa-resource-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cfa-resource-icon-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cfa-resource-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.cfa-resource-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cfa-resource-subtitle {
+  font-size: 11px;
+  color: var(--cfa-text-muted);
+}
+
+.cfa-resource-download-btn {
+  background: transparent;
+  border: 1px solid var(--cfa-border);
+  border-radius: 6px;
+  padding: 6px;
+  color: var(--cfa-text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.cfa-resource-download-btn:hover {
+  background: #f1f5f9;
+  color: var(--cfa-text-navy);
+  border-color: #cbd5e1;
+}
+
+.cfa-resource-download-btn.downloaded {
+  border-color: #a7f3d0;
+  background: var(--cfa-green-light);
+}
+
+.cfa-resource-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #cbd5e1;
+  border-top-color: var(--cfa-green-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Related Topics List */
+.cfa-related-topics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cfa-related-topic-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 6px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.cfa-related-topic-item:hover {
+  background: #f8fafc;
+}
+
+.cfa-related-topic-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.cfa-related-topic-icon {
+  display: flex;
+  align-items: center;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.cfa-related-topic-title {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--cfa-text-navy);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cfa-related-topic-chevron {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   TAB CONTENT STYLES (EXAMPLES, PRACTICE, SUMMARY, NOTES)
+   -------------------------------------------------------------------------- */
+.cfa-lesson-tab-body {
+  padding-top: 4px;
+}
+
+.cfa-learn-tab-intro {
+  margin-bottom: 18px;
+}
+
+.cfa-learn-tab-intro.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cfa-learn-tab-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  margin: 0 0 4px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+.cfa-learn-tab-desc {
+  font-size: 13px;
+  color: var(--cfa-text-muted);
+  margin: 0;
+}
+
+/* Worked Examples */
+.cfa-learn-examples-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cfa-learn-example-card {
+  border: 1px solid var(--cfa-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.cfa-learn-example-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.cfa-learn-example-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cfa-learn-example-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  background: var(--cfa-green-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cfa-learn-example-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-learn-example-chevron {
+  color: #94a3b8;
+}
+
+.cfa-learn-example-body {
+  padding: 16px;
+  border-top: 1px solid var(--cfa-border);
+}
+
+.cfa-learn-problem-box {
+  margin-bottom: 14px;
+}
+
+.cfa-learn-problem-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cfa-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.cfa-learn-problem-text {
+  font-size: 13.5px;
+  color: var(--cfa-text-navy);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.cfa-learn-formula-banner {
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 6px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.cfa-learn-formula-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1d4ed8;
+  text-transform: uppercase;
+}
+
+.cfa-learn-formula-code {
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+.cfa-learn-solution-section {
+  margin-bottom: 14px;
+}
+
+.cfa-learn-solution-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.cfa-learn-solution-steps {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cfa-learn-solution-step {
+  font-size: 13px;
+  color: var(--cfa-text-body);
+  line-height: 1.45;
+}
+
+.cfa-learn-final-answer-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--cfa-border);
+}
+
+.cfa-learn-final-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cfa-text-muted);
+}
+
+.cfa-learn-final-pill {
+  background: var(--cfa-green-light);
+  color: var(--cfa-green-primary);
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid #a7f3d0;
+}
+
+/* Practice Questions */
+.cfa-learn-practice-score-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--cfa-green-light);
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  padding: 6px 14px;
+}
+
+.cfa-score-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cfa-green-dark);
+}
+
+.cfa-score-val {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--cfa-green-primary);
+}
+
+.cfa-learn-practice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.cfa-learn-practice-card {
+  border: 1px solid var(--cfa-border);
+  border-radius: 10px;
+  padding: 16px;
+  background: #ffffff;
+}
+
+.cfa-practice-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.cfa-practice-q-num {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--cfa-text-muted);
+  text-transform: uppercase;
+}
+
+.cfa-practice-result-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.cfa-practice-result-badge.correct {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.cfa-practice-result-badge.incorrect {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.cfa-practice-question-text {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+  margin: 0 0 14px;
+  line-height: 1.5;
+}
+
+.cfa-practice-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.cfa-practice-option {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #f8fafc;
+  border: 1px solid var(--cfa-border);
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.cfa-practice-option:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.cfa-practice-option.selected {
+  background: #eff6ff;
+  border-color: #3b82f6;
+}
+
+.cfa-practice-option.correct-opt {
+  background: #dcfce7 !important;
+  border-color: #22c55e !important;
+}
+
+.cfa-practice-option.incorrect-opt {
+  background: #fee2e2 !important;
+  border-color: #ef4444 !important;
+}
+
+.cfa-practice-opt-letter {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cfa-practice-option.selected .cfa-practice-opt-letter {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+.cfa-practice-option.correct-opt .cfa-practice-opt-letter {
+  background: #16a34a;
+  border-color: #16a34a;
+  color: #ffffff;
+}
+
+.cfa-practice-opt-text {
+  font-size: 13px;
+  color: var(--cfa-text-body);
+  line-height: 1.4;
+}
+
+.cfa-practice-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cfa-practice-submit-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--cfa-green-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.cfa-practice-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cfa-practice-retry-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  border: 1px solid var(--cfa-border);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cfa-text-muted);
+  cursor: pointer;
+}
+
+.cfa-practice-explanation-box {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: #f8fafc;
+  border-left: 3px solid var(--cfa-green-primary);
+  border-radius: 0 8px 8px 0;
+}
+
+.cfa-explanation-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cfa-green-primary);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.cfa-explanation-text {
+  font-size: 12.5px;
+  color: var(--cfa-text-body);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Summary Tab */
+.cfa-summary-section {
+  margin-bottom: 22px;
+}
+
+.cfa-summary-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.cfa-summary-section-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+.cfa-summary-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.cfa-summary-item-card {
+  background: #f8fafc;
+  border: 1px solid var(--cfa-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.cfa-summary-item-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  margin: 0 0 6px;
+}
+
+.cfa-summary-item-desc {
+  font-size: 12px;
+  color: var(--cfa-text-body);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.cfa-formulas-table-wrap {
+  border: 1px solid var(--cfa-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cfa-formulas-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.cfa-formulas-table th {
+  background: #f8fafc;
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 700;
+  color: var(--cfa-text-muted);
+  border-bottom: 1px solid var(--cfa-border);
+}
+
+.cfa-formulas-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.cfa-formula-concept-cell {
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-formula-code-cell code {
+  font-family: monospace;
+  font-size: 12.5px;
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #0f172a;
+}
+
+/* Notes Tab */
+.cfa-notes-save-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  color: var(--cfa-green-primary);
+  font-weight: 600;
+}
+
+.cfa-saving-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid #cbd5e1;
+  border-top-color: var(--cfa-green-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.cfa-notes-snippets-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.cfa-notes-snippets-label {
+  font-size: 12px;
+  color: var(--cfa-text-muted);
+  font-weight: 600;
+}
+
+.cfa-notes-insert-pill {
+  background: #f1f5f9;
+  border: 1px solid var(--cfa-border);
+  border-radius: 12px;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cfa-notes-insert-pill:hover {
+  background: #e2e8f0;
+}
+
+.cfa-notes-editor-card {
+  border: 1px solid var(--cfa-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.cfa-notes-textarea {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  outline: none;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--cfa-text-navy);
+  resize: vertical;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE DESIGN BREAKPOINTS
+   -------------------------------------------------------------------------- */
+@media (max-width: 1320px) {
+  .cfa-learn-workspace-grid {
+    flex-wrap: wrap;
+  }
+  .cfa-curriculum-panel {
+    width: 220px;
+  }
+  .cfa-lesson-right-column {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 960px) {
+  .cfa-learn-workspace-grid {
+    flex-direction: column;
+  }
+  .cfa-curriculum-panel {
+    width: 100%;
+    position: static;
+    max-height: none;
+  }
+  .cfa-learn-center-workspace {
+    width: 100%;
+  }
+  .cfa-lesson-right-column {
+    grid-template-columns: 1fr;
+  }
+}
