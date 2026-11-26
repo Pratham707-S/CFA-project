@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, Bell, ChevronDown } from "@/components/ui/icons";
+import { Search, Bell, ChevronDown, Sun } from "@/components/ui/icons";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface HeaderProps {
@@ -51,6 +51,16 @@ export function Header({
 
       {/* Header Actions */}
       <div className="cfa-header-actions">
+        {/* Sun / Theme indicator */}
+        <button
+          type="button"
+          className="cfa-theme-btn"
+          aria-label="Theme"
+          title="Light theme"
+        >
+          <Sun size={18} className="cfa-sun-icon" />
+        </button>
+
         {/* Notifications Icon with dot */}
         <button
           type="button"

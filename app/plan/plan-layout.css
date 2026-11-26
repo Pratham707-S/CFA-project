@@ -1,0 +1,1392 @@
+/* ==========================================================================
+   MY CFA PLAN — OPTION 2 UI IMPLEMENTATION
+   Design Tokens & Clean Modern Educational SaaS Layout
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   PLAN HEADER & NAVIGATION BAR
+   -------------------------------------------------------------------------- */
+.cfa-plan-header-container {
+  margin-bottom: 22px;
+}
+
+.cfa-plan-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.cfa-plan-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.cfa-plan-main-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  margin: 0 0 4px;
+  letter-spacing: -0.025em;
+}
+
+.cfa-plan-subtitle {
+  font-size: 13.5px;
+  color: var(--cfa-text-muted);
+  margin: 0;
+}
+
+/* Level Selector */
+.cfa-plan-level-wrapper {
+  position: relative;
+}
+
+.cfa-plan-level-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: 10px;
+  padding: 8px 14px;
+  box-shadow: var(--cfa-shadow-card);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cfa-plan-level-btn:hover {
+  border-color: #cbd5e1;
+}
+
+.cfa-plan-level-icon {
+  color: var(--cfa-green-primary);
+  display: flex;
+  align-items: center;
+}
+
+.cfa-plan-level-text {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-plan-level-chevron {
+  color: var(--cfa-text-muted);
+}
+
+.cfa-plan-level-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 170px;
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: 10px;
+  box-shadow: var(--cfa-shadow-dropdown);
+  padding: 6px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cfa-plan-level-item {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--cfa-text-body);
+  text-align: left;
+  cursor: pointer;
+}
+
+.cfa-plan-level-item:hover,
+.cfa-plan-level-item.selected {
+  background: var(--cfa-bg-green-soft);
+  color: var(--cfa-green-primary);
+  font-weight: 600;
+}
+
+/* Tabs Bar & Action Buttons */
+.cfa-plan-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--cfa-border);
+  padding-bottom: 2px;
+  gap: 16px;
+}
+
+.cfa-plan-tabs-list {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.cfa-plan-tab-btn {
+  position: relative;
+  background: none;
+  border: none;
+  padding: 8px 0 12px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--cfa-text-muted);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.cfa-plan-tab-btn:hover {
+  color: var(--cfa-text-navy);
+}
+
+.cfa-plan-tab-btn.active {
+  color: var(--cfa-text-navy);
+  font-weight: 700;
+}
+
+.cfa-plan-tab-indicator {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background-color: var(--cfa-green-primary);
+  border-radius: 2px 2px 0 0;
+}
+
+.cfa-plan-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cfa-plan-btn-edit {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid var(--cfa-border);
+  border-radius: var(--cfa-radius-sm);
+  padding: 8px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  transition: all 0.15s ease;
+}
+
+.cfa-plan-btn-edit:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.cfa-plan-btn-ai {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--cfa-green-primary);
+  border: 1px solid var(--cfa-green-primary);
+  border-radius: var(--cfa-radius-sm);
+  padding: 8px 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(13, 123, 95, 0.2);
+  transition: all 0.15s ease;
+}
+
+.cfa-plan-btn-ai:hover {
+  background: var(--cfa-green-hover);
+  border-color: var(--cfa-green-hover);
+}
+
+/* --------------------------------------------------------------------------
+   TOP METRIC CARDS ROW
+   -------------------------------------------------------------------------- */
+.cfa-plan-top-cards-row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.65fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+/* Exam Details Card */
+.cfa-exam-details-card {
+  padding: 18px 22px;
+}
+
+.cfa-exam-details-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.cfa-exam-info-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cfa-exam-calendar-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  color: var(--cfa-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cfa-exam-info-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.cfa-exam-level-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-exam-date-month {
+  font-size: 12px;
+  color: var(--cfa-text-muted);
+  margin-top: 2px;
+}
+
+.cfa-days-remaining-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.cfa-days-number {
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--cfa-text-navy);
+  line-height: 1;
+}
+
+.cfa-days-label {
+  font-size: 11.5px;
+  color: var(--cfa-text-muted);
+  margin-top: 4px;
+}
+
+/* Plan Overview Card */
+.cfa-plan-overview-card {
+  padding: 18px 22px;
+}
+
+.cfa-plan-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.cfa-metric-subcard {
+  background: #ffffff;
+  border: 1px solid var(--cfa-border-soft);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cfa-metric-subcard.progress-subcard {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.cfa-metric-top-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.cfa-metric-icon-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--cfa-bg-green-soft);
+  color: var(--cfa-green-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cfa-metric-text-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cfa-metric-title {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--cfa-text-muted);
+  white-space: nowrap;
+}
+
+.cfa-metric-value {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+.cfa-plan-progress-bar-track {
+  width: 100%;
+  height: 4px;
+  background: #f1f5f9;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.cfa-plan-progress-bar-fill {
+  height: 100%;
+  background-color: var(--cfa-green-primary);
+  border-radius: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   MIDDLE SECTION: CFA ROADMAP
+   -------------------------------------------------------------------------- */
+.cfa-roadmap-card {
+  padding: 22px;
+  margin-bottom: 16px;
+}
+
+.cfa-roadmap-timeline-wrapper {
+  position: relative;
+  margin-top: 10px;
+}
+
+/* Track Line */
+.cfa-roadmap-track-line {
+  position: absolute;
+  top: 15px;
+  left: 5%;
+  right: 5%;
+  height: 2px;
+  background-color: var(--cfa-border);
+  z-index: 1;
+}
+
+.cfa-roadmap-track-fill {
+  height: 100%;
+  background-color: var(--cfa-green-primary);
+}
+
+.cfa-roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.cfa-roadmap-col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Node Circle */
+.cfa-roadmap-node-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cfa-roadmap-node {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid var(--cfa-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 4px #ffffff;
+}
+
+.cfa-roadmap-node.completed {
+  background: var(--cfa-green-primary);
+  border-color: var(--cfa-green-primary);
+  color: #ffffff;
+}
+
+.cfa-node-check {
+  color: #ffffff;
+}
+
+.cfa-roadmap-node.current {
+  background: #ffffff;
+  border: 2.5px solid var(--cfa-green-primary);
+}
+
+.cfa-node-current-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--cfa-green-primary);
+}
+
+.cfa-roadmap-node.upcoming {
+  background: #ffffff;
+  border-color: #cbd5e1;
+}
+
+/* Column Header */
+.cfa-roadmap-col-header {
+  margin-bottom: 10px;
+}
+
+.cfa-roadmap-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cfa-roadmap-phase-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-roadmap-current-badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.cfa-roadmap-phase-dates {
+  font-size: 11px;
+  color: var(--cfa-text-muted);
+  display: block;
+  margin-top: 2px;
+}
+
+/* Objectives Card Box */
+.cfa-roadmap-box {
+  background: #f8fafc;
+  border: 1px solid var(--cfa-border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  flex: 1;
+}
+
+.cfa-roadmap-box.completed,
+.cfa-roadmap-box.current {
+  background: #f4f9f6;
+  border-color: #d1fae5;
+}
+
+.cfa-roadmap-items-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cfa-roadmap-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--cfa-text-body);
+  line-height: 1.35;
+}
+
+.cfa-item-bullet {
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.cfa-item-bullet.completed,
+.cfa-item-bullet.current {
+  color: var(--cfa-green-primary);
+  font-weight: 700;
+}
+
+.cfa-item-bullet.upcoming {
+  color: var(--cfa-text-light);
+}
+
+/* --------------------------------------------------------------------------
+   BOTTOM SECTION: THIS WEEK'S PLAN & MONTHLY CALENDAR
+   -------------------------------------------------------------------------- */
+.cfa-plan-bottom-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 16px;
+}
+
+/* Pagination group */
+.cfa-card-pagination-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cfa-pagination-date-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--cfa-text-muted);
+}
+
+.cfa-pagination-arrows {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cfa-pagination-arrow-btn {
+  background: none;
+  border: 1px solid var(--cfa-border);
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cfa-text-body);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cfa-pagination-arrow-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+/* This Week's Plan Rows */
+.cfa-week-plan-card {
+  padding: 20px 22px;
+}
+
+.cfa-week-plan-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.cfa-day-plan-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px;
+  background: #ffffff;
+  border: 1px solid var(--cfa-border-soft);
+  border-radius: 8px;
+  transition: background 0.12s ease;
+}
+
+.cfa-day-plan-row:hover {
+  background: #f8fafc;
+}
+
+.cfa-day-plan-col-date {
+  display: flex;
+  flex-direction: column;
+  width: 50px;
+  flex-shrink: 0;
+}
+
+.cfa-day-short {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-date-num {
+  font-size: 10.5px;
+  color: var(--cfa-text-muted);
+}
+
+.cfa-day-status-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.cfa-status-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cfa-status-circle.completed {
+  background: var(--cfa-green-primary);
+  color: #ffffff;
+}
+
+.cfa-status-circle.in-progress {
+  border: 2px solid var(--cfa-green-primary);
+  color: var(--cfa-green-primary);
+  background: #ffffff;
+}
+
+.cfa-play-icon {
+  margin-left: 1px;
+}
+
+.cfa-status-circle.pending {
+  color: #cbd5e1;
+}
+
+.cfa-day-plan-col-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cfa-day-plan-subject {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cfa-day-plan-detail {
+  font-size: 11px;
+  color: var(--cfa-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+.cfa-day-plan-col-time {
+  font-size: 11.5px;
+  color: var(--cfa-text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cfa-day-plan-col-action {
+  flex-shrink: 0;
+}
+
+/* Monthly Calendar Card */
+.cfa-monthly-calendar-card {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cfa-calendar-table-container {
+  margin-top: 8px;
+  flex: 1;
+}
+
+.cfa-calendar-weekdays-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.cfa-calendar-weekday-col {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--cfa-text-muted);
+}
+
+.cfa-calendar-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(5, minmax(36px, auto));
+  row-gap: 6px;
+  text-align: center;
+}
+
+.cfa-calendar-day-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 40px;
+  padding-top: 4px;
+}
+
+.cfa-calendar-day-cell.other-month .cfa-calendar-day-number {
+  color: #cbd5e1;
+}
+
+.cfa-calendar-day-number {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.cfa-calendar-day-number.today-badge {
+  background-color: var(--cfa-green-primary);
+  color: #ffffff;
+  border-radius: 50%;
+}
+
+.cfa-calendar-dots-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5px;
+  height: 6px;
+  margin-top: 2px;
+}
+
+.cfa-calendar-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+}
+
+.cfa-calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid var(--cfa-border-soft);
+  padding-top: 14px;
+  margin-top: 12px;
+}
+
+.cfa-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cfa-legend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.cfa-legend-name {
+  font-size: 10.5px;
+  color: var(--cfa-text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   OTHER TABS CONTENT (Weekly, Calendar, Subjects, Revision)
+   -------------------------------------------------------------------------- */
+.cfa-tab-content-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cfa-weekly-summary-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.cfa-tab-metric-card {
+  padding: 16px 20px;
+}
+
+.cfa-tab-metric-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.cfa-tab-metric-num {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-tab-metric-sub {
+  font-size: 11.5px;
+  color: var(--cfa-text-muted);
+  margin-top: 2px;
+}
+
+.cfa-weekly-tasks-table {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.cfa-weekly-task-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--cfa-border-soft);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.cfa-weekly-task-item:hover {
+  background: #f8fafc;
+}
+
+.cfa-weekly-task-item.done {
+  background: #f4f9f6;
+  border-color: #d1fae5;
+}
+
+.cfa-task-check-circle {
+  color: var(--cfa-green-primary);
+  display: flex;
+}
+
+.cfa-task-day-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  width: 70px;
+}
+
+.cfa-task-details-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cfa-task-subject-tag {
+  font-size: 10.5px;
+  color: var(--cfa-text-muted);
+}
+
+.cfa-task-main-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+  margin-top: 2px;
+}
+
+.cfa-task-type-tag {
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.cfa-task-type-tag.concept {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.cfa-task-type-tag.practice {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.cfa-task-type-tag.revision {
+  background: #f3e8ff;
+  color: #6b21a8;
+}
+
+.cfa-task-hours-badge {
+  font-size: 11px;
+  color: var(--cfa-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Calendar Tab Milestones */
+.cfa-calendar-tab-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 16px;
+}
+
+.cfa-milestones-card {
+  padding: 20px 22px;
+}
+
+.cfa-milestones-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.cfa-milestone-item {
+  display: flex;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--cfa-border-soft);
+  border-radius: 8px;
+}
+
+.cfa-milestone-indicator {
+  width: 4px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.cfa-milestone-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.cfa-milestone-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-milestone-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.cfa-milestone-date {
+  font-size: 11px;
+  color: var(--cfa-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cfa-milestone-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+/* Subjects Tab Grid */
+.cfa-subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.cfa-subject-card-box {
+  background: #ffffff;
+  border: 1px solid var(--cfa-border-soft);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cfa-subject-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.cfa-subject-title-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.cfa-subject-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-subject-weight {
+  font-size: 11px;
+  color: var(--cfa-text-muted);
+  margin-top: 2px;
+}
+
+.cfa-subject-percent {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-subject-bar-track {
+  height: 6px;
+  background: #f1f5f9;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.cfa-subject-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.cfa-subject-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--cfa-text-muted);
+}
+
+.cfa-subject-modules {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Revision Tab */
+.cfa-revision-phases-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.cfa-revision-phase-box {
+  background: #ffffff;
+  border: 1px solid var(--cfa-border-soft);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.cfa-revision-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.cfa-revision-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cfa-revision-frequency {
+  font-size: 11px;
+  color: var(--cfa-green-primary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cfa-revision-desc {
+  font-size: 12px;
+  color: var(--cfa-text-muted);
+  line-height: 1.45;
+  margin: 0 0 10px;
+}
+
+.cfa-revision-topics-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cfa-revision-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  background: #f1f5f9;
+  border-radius: 6px;
+  padding: 4px 10px;
+  color: var(--cfa-text-navy);
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   MODALS: EDIT PLAN & AI PLAN OPTIMIZER
+   -------------------------------------------------------------------------- */
+.cfa-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+
+.cfa-modal-card {
+  width: min(100%, 520px);
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cfa-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--cfa-border);
+}
+
+.cfa-modal-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cfa-text-navy);
+  margin: 0;
+}
+
+.cfa-modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: var(--cfa-text-muted);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.cfa-modal-body {
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cfa-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cfa-modal-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cfa-text-navy);
+}
+
+.cfa-modal-select {
+  border: 1px solid var(--cfa-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--cfa-text-navy);
+  outline: none;
+  background: #ffffff;
+}
+
+.cfa-hours-options-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cfa-choice-pill {
+  padding: 8px 12px;
+  border: 1px solid var(--cfa-border);
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 12px;
+  color: var(--cfa-text-body);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cfa-choice-pill:hover {
+  background: #f8fafc;
+}
+
+.cfa-choice-pill.active {
+  background: var(--cfa-bg-green-soft);
+  border-color: var(--cfa-green-primary);
+  color: var(--cfa-green-primary);
+  font-weight: 700;
+}
+
+.cfa-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--cfa-border);
+  background: #f8fafc;
+}
+
+.cfa-btn-modal-cancel {
+  border: 1px solid var(--cfa-border);
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cfa-text-body);
+  cursor: pointer;
+}
+
+.cfa-btn-modal-save {
+  background: var(--cfa-green-primary);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+/* AI Modal Additions */
+.cfa-ai-modal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cfa-ai-preview-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: #854d0e;
+  background: #fefce8;
+  border: 1px solid #fef08a;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 2px;
+}
+
+.cfa-ai-modal-desc {
+  font-size: 12.5px;
+  color: var(--cfa-text-muted);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.cfa-ai-recommendations-box {
+  background: #f4f9f6;
+  border: 1px solid #d1fae5;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.cfa-ai-rec-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--cfa-green-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 8px;
+}
+
+.cfa-ai-rec-list {
+  list-style: disc;
+  padding-left: 18px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--cfa-text-body);
+}
+
+.cfa-ai-applied-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: #065f46;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE DESIGN
+   -------------------------------------------------------------------------- */
+@media (max-width: 1200px) {
+  .cfa-plan-top-cards-row {
+    grid-template-columns: 1fr;
+  }
+  .cfa-plan-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+  .cfa-roadmap-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cfa-roadmap-track-line {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .cfa-plan-title-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .cfa-plan-nav-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .cfa-plan-tabs-list {
+    overflow-x: auto;
+    width: 100%;
+    gap: 18px;
+  }
+  .cfa-plan-header-actions {
+    width: 100%;
+  }
+  .cfa-plan-btn-edit,
+  .cfa-plan-btn-ai {
+    flex: 1;
+    justify-content: center;
+  }
+  .cfa-plan-metrics-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cfa-roadmap-grid {
+    grid-template-columns: 1fr;
+  }
+  .cfa-subjects-grid {
+    grid-template-columns: 1fr;
+  }
+  .cfa-weekly-summary-row {
+    grid-template-columns: 1fr;
+  }
+}
