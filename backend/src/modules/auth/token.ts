@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { SignJWT } from "jose";
 
 export const SESSION_COOKIE_NAME = "cfa_session";
@@ -5,6 +6,7 @@ export const SESSION_COOKIE_NAME = "cfa_session";
 export async function createSessionToken(userId: string, secret: string): Promise<string> {
   return new SignJWT({ sub: userId, type: "session" })
     .setProtectedHeader({ alg: "HS256" })
+    .setJti(randomUUID())
     .setIssuedAt()
     .setExpirationTime("7d")
     .sign(new TextEncoder().encode(secret));

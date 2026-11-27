@@ -6,7 +6,11 @@
     "dev:all": "bash ./scripts/dev-all.sh",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint app components hooks lib tests eslint.config.mjs vitest.config.ts",
+    "format:check": "prettier --check hooks/use-lesson-data.ts tests eslint.config.mjs vitest.config.ts .github/workflows/quality.yml backend/package.json backend/tests/integration/postgres.integration.test.ts backend/tests/test-database-target.test.ts backend/scripts/verify-seed-idempotency.mjs backend/vitest.config.mts backend/vitest.integration.config.mts",
+    "typecheck": "tsc --noEmit",
+    "test:frontend": "vitest run",
+    "test:frontend:watch": "vitest"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -16,9 +20,26 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "3.3.1",
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/jest-dom": "8.0.0",
+    "@testing-library/react": "16.3.3",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "typescript": "^5.9.0"
-  }
+    "@vitejs/plugin-react": "5.1.4",
+    "eslint": "9.39.5",
+    "eslint-config-next": "15.5.29",
+    "jsdom": "26.1.0",
+    "prettier": "3.10.1",
+    "typescript": "^5.9.0",
+    "vitest": "5.1.1"
+  },
+  "overrides": {
+    "postcss": "8.5.34"
+  },
+  "engines": {
+    "node": ">=26.13.1 <27"
+  },
+  "packageManager": "npm@11.20.0"
 }

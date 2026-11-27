@@ -13,3 +13,5 @@ backend/.env.*
 .next/
 .next-build-corrupt-*/
 *.tsbuildinfo
+coverage/
+backend/coverage/

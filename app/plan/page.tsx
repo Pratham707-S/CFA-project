@@ -133,7 +133,10 @@ export default function MyCfaPlanPage() {
         <Header
           userName={fullName}
           userEmail={userEmail}
-          onLogout={() => router.push("/login")}
+          onLogout={async () => {
+            await apiRequest("/auth/logout", { method: "POST" });
+            router.replace("/login");
+          }}
         />
 
         {/* Plan Content Area */}

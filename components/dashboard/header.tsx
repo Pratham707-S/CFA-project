@@ -8,7 +8,7 @@ interface HeaderProps {
   userName?: string;
   userEmail?: string;
   onSearch?: (query: string) => void;
-  onLogout?: () => void;
+  onLogout?: () => void | Promise<void>;
 }
 
 export function Header({
@@ -19,6 +19,22 @@ export function Header({
 }: HeaderProps) {
   const [searchVal, setSearchVal] = useState("");
   const [profileOpen, setProfileOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [logoutError, setLogoutError] = useState("");
+
+  const handleLogout = async () => {
+    if (!onLogout || isLoggingOut) return;
+    setLogoutError("");
+    setIsLoggingOut(true);
+    try {
+      await onLogout();
+      setProfileOpen(false);
+    } catch (error) {
+      setLogoutError(error instanceof Error ? error.message : "Could not sign out. Please try again.");
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   // Compute initials e.g. "Pratham Sharma" -> "PS"
   const getInitials = (name: string) => {
@@ -112,13 +128,12 @@ export function Header({
               <button
                 type="button"
                 className="cfa-profile-menu-item logout"
-                onClick={() => {
-                  setProfileOpen(false);
-                  onLogout?.();
-                }}
+                onClick={() => void handleLogout()}
+                disabled={!onLogout || isLoggingOut}
               >
-                Sign out
+                {isLoggingOut ? "Signing out…" : "Sign out"}
               </button>
+              {logoutError && <p role="alert">{logoutError}</p>}
             </div>
           )}
         </div>

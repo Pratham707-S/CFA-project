@@ -30,6 +30,7 @@ export interface ResourceItem {
   subtitle: string;
   fileType: "pdf" | "doc" | "sheet";
   color: string;
+  url?: string;
 }
 
 export interface RelatedTopicItem {

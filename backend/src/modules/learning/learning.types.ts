@@ -40,6 +40,17 @@ export type LessonRecord = LessonSummary & {
   subtopic: SubtopicTree & { module: ModuleTree & { subject: SubjectTree & { curriculum: CurriculumTree } } };
 };
 
+export type DraftLessonRecord = LessonSummary & {
+  content: unknown | null;
+  subtopic: SubtopicTree & {
+    module: ModuleTree & {
+      subject: Omit<SubjectTree, "modules"> & {
+        curriculum: Omit<CurriculumTree, "subjects">;
+      };
+    };
+  };
+};
+
 export type VideoRecord = {
   id: string; lessonId: string; provider: string; youtubeVideoId: string; title: string; videoUrl: string; embedUrl: string;
   durationSeconds: number | null; language: string; explanationStyle: string | null; isPrimary: boolean;

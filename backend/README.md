@@ -26,12 +26,14 @@ npm run seed
 npm run dev
 ```
 
-The seed is idempotent and adds only the CFA Level I 2027 Quantitative Methods
-curriculum and its official module titles. It does not create subtopics,
-lessons, sample questions, or video links. Run migrations deliberately with
-`npx prisma migrate deploy` only after reviewing the generated SQL and choosing
-the intended database. The task implementation generated a migration locally;
-it has not been applied to Neon.
+The seed upserts CFA Level I 2027 Quantitative Methods and Economics curriculum
+data, and defines written lesson/question drafts and video candidates. Draft
+written content stays `DRAFT`; newly created video candidates stay
+`PENDING_REVIEW`, while existing reviewer decisions are preserved. Its upsert
+structure is intended to be idempotent, but that has not yet been verified
+against a disposable PostgreSQL database. No seed or migration was run against
+Neon in this sprint. Run migrations deliberately with `npx prisma migrate
+deploy` only after reviewing the SQL and choosing a non-production target.
 
 ## API groups
 
@@ -85,3 +87,39 @@ or transcript copying is performed.
 context for a future tutor. It does not call a model, fabricate answers, or
 access credentials. Provider integration belongs behind a later service
 interface and server-side configuration.
+
+## Safe curriculum seed workflow
+
+The seed command requires an explicit disposable local or approved staging
+database; it does not fall back to `DATABASE_URL`. Never set the seed target to
+production.
+
+```sh
+CFA_SEED_TARGET=local # or staging
+CFA_SEED_DATABASE_URL=postgresql://... # separate non-production database
+CFA_SEED_CONFIRM_NONPRODUCTION=I_VERIFIED_THIS_IS_NOT_PRODUCTION
+npm run seed
+```
+
+The guard rejects `NODE_ENV=production`, missing acknowledgement,
+non-PostgreSQL URLs, and a seed URL that resolves to the same host/database
+path as `DATABASE_URL`. It cannot determine whether an arbitrary remote URL is
+truly staging; verify the database name and branch before acknowledging it.
+
+Use a disposable PostgreSQL instance for repository integration tests. Apply
+the reviewed migration set to that instance only, run the seed twice, then
+compare row counts and statuses to verify idempotency. The migration history
+contains two password-hash migrations; review their applied state and resolve
+the duplicate safely before initializing a fresh test database. No migration
+or seed command in this sprint was run against Neon.
+
+## API rate limits
+
+Sign-up is limited to 5 requests per IP per hour, sign-in to 5 per IP per 15
+minutes, and question attempts to 30 per IP per minute. The default client IP
+is used because Fastify proxy trust remains disabled; do not enable
+`trustProxy` until the trusted proxy hops are explicitly configured. The
+current limiter uses process-local memory, so limits are not shared across
+multiple backend instances or restarts. A multi-instance deployment needs a
+shared store such as Redis and should consider adding per-account limits to the
+IP limits.

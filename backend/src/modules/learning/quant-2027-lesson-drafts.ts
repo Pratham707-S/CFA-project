@@ -1,7 +1,7 @@
 import type { z } from "zod";
 import { lessonContentSchema } from "./learning.schema.js";
 
-type LessonContent = z.infer<typeof lessonContentSchema>;
+type LessonContent = z.input<typeof lessonContentSchema>;
 
 /** Original, review-pending teaching drafts aligned to the public CFA Institute 2027 Level I Quant outcomes. */
 export const quant2027LessonDrafts = {

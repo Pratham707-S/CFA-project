@@ -37,6 +37,29 @@ describe("email and password auth API", () => {
     await app.close();
   });
 
+  it("rate limits repeated sign-in attempts with HTTP 429", async () => {
+    const app = createApp();
+    const payload = { email: "missing@example.com", password: "incorrect-password" };
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const response = await app.inject({ method: "POST", url: "/auth/signin", payload });
+      expect(response.statusCode).toBe(401);
+    }
+    const limited = await app.inject({ method: "POST", url: "/auth/signin", payload });
+    expect(limited.statusCode).toBe(429);
+    await app.close();
+  });
+
+  it("rate limits account creation requests before processing invalid payloads", async () => {
+    const app = createApp();
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const response = await app.inject({ method: "POST", url: "/auth/signup", payload: {} });
+      expect(response.statusCode).toBe(400);
+    }
+    const limited = await app.inject({ method: "POST", url: "/auth/signup", payload: {} });
+    expect(limited.statusCode).toBe(429);
+    await app.close();
+  });
+
   it("rejects duplicate email registration", async () => {
     const app = createApp();
     const payload = { email: "duplicate@example.com", password: "password123", displayName: "CFA Student" };
@@ -60,7 +83,10 @@ describe("email and password auth API", () => {
     expect(me.statusCode).toBe(200);
     expect(me.json().user.role).toBe("STUDENT");
     expect(logout.statusCode).toBe(200);
+    expect(logout.json()).toEqual({ success: true });
+    expect(logout.headers["set-cookie"]).toMatch(/max-age=0/i);
     expect(unauthenticated.statusCode).toBe(401);
+    expect(unauthenticated.json().error.code).toBe("INVALID_SESSION");
     await app.close();
   });
 });

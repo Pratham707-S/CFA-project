@@ -1,27 +1,41 @@
 "use client";
 
 import React, { useState } from "react";
-import { practiceQuestions } from "./learn-data";
 import { Check, RotateCcw } from "@/components/ui/icons";
+import { apiRequest } from "@/lib/api";
+import type { LessonQuestion } from "./content-types";
 
-export function LessonPractice() {
+type AttemptResult = { isCorrect: boolean; correctAnswer: string; explanation: string; solutionSteps: { label: string; content: string }[] | null };
+
+export function LessonPractice({ questions, isLoading, error }: { questions: LessonQuestion[]; isLoading: boolean; error: string | null }) {
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
-  const [submittedQuestions, setSubmittedQuestions] = useState<Record<string, boolean>>({});
+  const [submittedResults, setSubmittedResults] = useState<Record<string, AttemptResult>>({});
+  const [submittingId, setSubmittingId] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const handleSelect = (questionId: string, optionId: string) => {
-    if (submittedQuestions[questionId]) return; // lock once submitted
+    if (submittedResults[questionId]) return;
     setSelectedAnswers((prev) => ({
       ...prev,
       [questionId]: optionId,
     }));
   };
 
-  const handleSubmit = (questionId: string) => {
+  const handleSubmit = async (questionId: string) => {
     if (!selectedAnswers[questionId]) return;
-    setSubmittedQuestions((prev) => ({
-      ...prev,
-      [questionId]: true,
-    }));
+    setSubmittingId(questionId);
+    setSubmitError(null);
+    try {
+      const response = await apiRequest<{ feedback: AttemptResult }>(`/api/questions/${questionId}/attempt`, {
+        method: "POST",
+        body: JSON.stringify({ selectedAnswer: selectedAnswers[questionId] }),
+      });
+      setSubmittedResults((previous) => ({ ...previous, [questionId]: response.feedback }));
+    } catch (cause) {
+      setSubmitError(cause instanceof Error ? cause.message : "Could not submit your answer. Please try again.");
+    } finally {
+      setSubmittingId(null);
+    }
   };
 
   const handleReset = (questionId: string) => {
@@ -30,7 +44,7 @@ export function LessonPractice() {
       delete copy[questionId];
       return copy;
     });
-    setSubmittedQuestions((prev) => {
+    setSubmittedResults((prev) => {
       const copy = { ...prev };
       delete copy[questionId];
       return copy;
@@ -38,11 +52,8 @@ export function LessonPractice() {
   };
 
   // Score count
-  const totalQuestions = practiceQuestions.length;
-  const answeredCount = Object.keys(submittedQuestions).length;
-  const correctCount = practiceQuestions.filter(
-    (q) => submittedQuestions[q.id] && selectedAnswers[q.id] === q.correctOptionId
-  ).length;
+  const totalQuestions = questions.length;
+  const correctCount = Object.values(submittedResults).filter((result) => result.isCorrect).length;
 
   return (
     <div className="cfa-lesson-tab-body">
@@ -62,11 +73,16 @@ export function LessonPractice() {
         </div>
       </div>
 
+      {isLoading && <p role="status">Loading published questions…</p>}
+      {error && <p role="alert">{error}</p>}
+      {submitError && <p role="alert">{submitError}</p>}
+      {!isLoading && !error && questions.length === 0 && <p role="status">No practice questions have been published for this lesson yet.</p>}
       <div className="cfa-learn-practice-list">
-        {practiceQuestions.map((q, qIndex) => {
-          const isSubmitted = !!submittedQuestions[q.id];
+        {questions.map((q, qIndex) => {
+          const result = submittedResults[q.id];
+          const isSubmitted = !!result;
           const selectedOption = selectedAnswers[q.id];
-          const isCorrect = isSubmitted && selectedOption === q.correctOptionId;
+          const isCorrect = result?.isCorrect ?? false;
 
           return (
             <div key={q.id} className="cfa-learn-practice-card">
@@ -87,12 +103,12 @@ export function LessonPractice() {
 
               {/* Options */}
               <div className="cfa-practice-options-list">
-                {q.options.map((opt) => {
+                {q.options.map((opt, optionIndex) => {
                   const isSelected = selectedOption === opt.id;
                   let optionClass = "cfa-practice-option";
                   if (isSelected) optionClass += " selected";
                   if (isSubmitted) {
-                    if (opt.id === q.correctOptionId) {
+                    if (opt.id === result?.correctAnswer) {
                       optionClass += " correct-opt";
                     } else if (isSelected && !isCorrect) {
                       optionClass += " incorrect-opt";
@@ -107,7 +123,7 @@ export function LessonPractice() {
                       onClick={() => handleSelect(q.id, opt.id)}
                       disabled={isSubmitted}
                     >
-                      <span className="cfa-practice-opt-letter">{opt.label}</span>
+                      <span className="cfa-practice-opt-letter">{String.fromCharCode(65 + optionIndex)}</span>
                       <span className="cfa-practice-opt-text">{opt.text}</span>
                     </button>
                   );
@@ -120,10 +136,10 @@ export function LessonPractice() {
                   <button
                     type="button"
                     className="cfa-practice-submit-btn"
-                    disabled={!selectedOption}
-                    onClick={() => handleSubmit(q.id)}
+                    onClick={() => void handleSubmit(q.id)}
+                    disabled={!selectedOption || submittingId === q.id}
                   >
-                    <span>Check Answer</span>
+                    <span>{submittingId === q.id ? "Submitting…" : "Check Answer"}</span>
                     <Check size={14} />
                   </button>
                 ) : (
@@ -141,7 +157,8 @@ export function LessonPractice() {
               {isSubmitted && (
                 <div className="cfa-practice-explanation-box">
                   <div className="cfa-explanation-title">Explanation:</div>
-                  <p className="cfa-explanation-text">{q.explanation}</p>
+                  <p className="cfa-explanation-text">{result.explanation}</p>
+                  {result.solutionSteps?.length ? <ol>{result.solutionSteps.map((step) => <li key={step.label}><strong>{step.label}: </strong>{step.content}</li>)}</ol> : null}
                 </div>
               )}
             </div>

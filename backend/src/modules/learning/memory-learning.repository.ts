@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { HttpError } from "../../shared/errors/http-error.js";
 import { quant2027Curriculum } from "./quant-2027-curriculum.js";
+import { economics2027Curriculum } from "./economics-2027-curriculum.js";
 import type {
   CurriculumCreateInput, LessonCreateInput, LessonPatchInput, ModuleCreateInput,
   ProgressUpdateInput, QuestionAttemptInput, QuestionCreateInput, SubtopicCreateInput,
@@ -8,7 +9,7 @@ import type {
 } from "./learning.schema.js";
 import type { LearningRepository } from "./learning.repository.js";
 import type {
-  AttemptQuestion, CurriculumTree, LessonRecord, LessonSummary, ModuleTree,
+  AttemptQuestion, CurriculumTree, DraftLessonRecord, LessonRecord, LessonSummary, ModuleTree,
   ProgressRecord, PublicQuestion, QuestionAttemptRecord, QuantProgressView,
   LearningOutcomeStatementRecord, SubtopicTree, SubjectTree, TutorLessonContext, VideoRecord, WeakConceptRecord,
 } from "./learning.types.js";
@@ -45,33 +46,42 @@ export class MemoryLearningRepository implements LearningRepository {
       const id = `module-${item.slug}`;
       this.modules.set(id, { id, subjectId, ...item, description: null, learningOutcomes: item.learningOutcomes, createdAt: now, updatedAt: now });
     }
+    const economicsSubjectId = "subject-economics-2027";
+    this.subjects.set(economicsSubjectId, { id: economicsSubjectId, curriculumId, ...economics2027Curriculum.subject, description: economics2027Curriculum.subject.description, createdAt: now, updatedAt: now });
+    for (const item of economics2027Curriculum.modules) {
+      const id = `module-${item.slug}`;
+      this.modules.set(id, { id, subjectId: economicsSubjectId, ...item, description: null, learningOutcomes: [...item.learningOutcomes], createdAt: now, updatedAt: now });
+    }
   }
 
   async getCurriculum(level: "LEVEL_I" | "LEVEL_II" | "LEVEL_III", year: number): Promise<CurriculumTree | null> {
-    const curriculum = [...this.curricula.values()].find((item) => item.level === level && item.curriculumYear === year && item.status === "PUBLISHED");
+    const curriculum = [...this.curricula.values()].find((item) => item.program === "CFA" && item.level === level && item.curriculumYear === year && item.status === "PUBLISHED");
     if (!curriculum) return null;
     const subjects = [...this.subjects.values()].filter((item) => item.curriculumId === curriculum.id && item.status === "PUBLISHED").sort((a, b) => a.order - b.order);
     return { ...curriculum, subjects: subjects.map((subject) => this.subjectTree(subject, true)) };
   }
 
   async listSubjects(level: "LEVEL_I" | "LEVEL_II" | "LEVEL_III", year: number): Promise<SubjectTree[]> {
-    const curriculum = [...this.curricula.values()].find((item) => item.level === level && item.curriculumYear === year && item.status === "PUBLISHED");
+    const curriculum = [...this.curricula.values()].find((item) => item.program === "CFA" && item.level === level && item.curriculumYear === year && item.status === "PUBLISHED");
     return curriculum ? [...this.subjects.values()].filter((item) => item.curriculumId === curriculum.id && item.status === "PUBLISHED").sort((a, b) => a.order - b.order).map((item) => ({ ...item })) : [];
   }
 
   async getSubjectBySlug(slug: string, year: number): Promise<SubjectTree | null> {
-    const curriculum = [...this.curricula.values()].find((item) => item.level === "LEVEL_I" && item.curriculumYear === year && item.status === "PUBLISHED");
+    const curriculum = [...this.curricula.values()].find((item) => item.program === "CFA" && item.level === "LEVEL_I" && item.curriculumYear === year && item.status === "PUBLISHED");
     const subject = [...this.subjects.values()].find((item) => item.curriculumId === curriculum?.id && item.slug === slug && item.status === "PUBLISHED");
     return subject ? this.subjectTree(subject, true) : null;
   }
 
   async listModules(subjectId: string): Promise<ModuleTree[]> {
+    const subject = this.subjects.get(subjectId);
+    const curriculum = subject && this.curricula.get(subject.curriculumId);
+    if (!subject || !curriculum || subject.status !== "PUBLISHED" || curriculum.status !== "PUBLISHED") return [];
     return [...this.modules.values()].filter((item) => item.subjectId === subjectId && item.status === "PUBLISHED").sort((a, b) => a.order - b.order).map((item) => ({ ...item }));
   }
 
   async getModule(moduleId: string): Promise<ModuleTree | null> {
     const item = this.modules.get(moduleId);
-    return item?.status === "PUBLISHED" ? this.moduleTree(item, true) : null;
+    return item && this.isPublishedModule(item) ? this.moduleTree(item, true) : null;
   }
 
   async getSubtopic(subtopicId: string): Promise<SubtopicTree | null> {
@@ -84,6 +94,8 @@ export class MemoryLearningRepository implements LearningRepository {
   }
 
   async listSubtopics(moduleId: string): Promise<SubtopicTree[]> {
+    const module = this.modules.get(moduleId);
+    if (!module || !this.isPublishedModule(module)) return [];
     return [...this.subtopics.values()].filter((item) => item.moduleId === moduleId && item.status === "PUBLISHED").sort((a, b) => a.order - b.order).map((item) => ({ ...item }));
   }
 
@@ -92,22 +104,24 @@ export class MemoryLearningRepository implements LearningRepository {
     const module = subtopic && this.modules.get(subtopic.moduleId);
     const subject = module && this.subjects.get(module.subjectId);
     const curriculum = subject && this.curricula.get(subject.curriculumId);
-    if (!subtopic || !module || !subject || !curriculum || [subtopic.status, module.status, subject.status, curriculum.status].some((status) => status !== "PUBLISHED")) return [];
+    if (!subtopic || !module || !subject || !curriculum || curriculum.program !== "CFA" || [subtopic.status, module.status, subject.status, curriculum.status].some((status) => status !== "PUBLISHED")) return [];
     return [...this.learningOutcomes.values()].filter((item) => item.subtopicId === subtopicId && item.curriculumId === curriculum.id && item.status === "PUBLISHED").sort((a, b) => a.order - b.order);
   }
 
   async listLessonLearningOutcomes(lessonId: string): Promise<LearningOutcomeStatementRecord[]> {
     const lesson = this.lessons.get(lessonId);
-    if (!lesson || lesson.status !== "PUBLISHED") return [];
+    if (!lesson || !await this.getLesson(lessonId)) return [];
     return (this.lessonLearningOutcomes.get(lessonId) ?? []).map((id) => this.learningOutcomes.get(id)).filter((item): item is LearningOutcomeStatementRecord => Boolean(item && item.status === "PUBLISHED" && item.subtopicId === lesson.subtopicId));
   }
 
   async listQuestionLearningOutcomes(questionId: string): Promise<LearningOutcomeStatementRecord[]> {
     const question = this.questions.get(questionId);
-    return question ? this.listLessonLearningOutcomes(question.lessonId).then((items) => items.filter((item) => (this.questionLearningOutcomes.get(questionId) ?? []).includes(item.id))) : [];
+    return question?.status === "PUBLISHED" ? this.listLessonLearningOutcomes(question.lessonId).then((items) => items.filter((item) => (this.questionLearningOutcomes.get(questionId) ?? []).includes(item.id))) : [];
   }
 
   async listLessons(subtopicId: string): Promise<LessonSummary[]> {
+    const subtopic = this.subtopics.get(subtopicId);
+    if (!subtopic || !this.isPublishedSubtopic(subtopic)) return [];
     return [...this.lessons.values()].filter((item) => item.subtopicId === subtopicId && item.status === "PUBLISHED").sort((a, b) => a.order - b.order).map((item) => this.lessonSummary(item));
   }
 
@@ -120,6 +134,23 @@ export class MemoryLearningRepository implements LearningRepository {
     const curriculum = subject && this.curricula.get(subject.curriculumId);
     if (!subtopic || !module || !subject || !curriculum || [subtopic.status, module.status, subject.status, curriculum.status].some((status) => status !== "PUBLISHED")) return null;
     return { ...lesson, subtopic: { ...subtopic, module: { ...module, subject: { ...subject, curriculum: { ...curriculum, subjects: [] } } } } } as LessonRecord;
+  }
+
+  async listDraftLessonsForAdmin(moduleId: string): Promise<DraftLessonRecord[]> {
+    const module = this.modules.get(moduleId);
+    if (!module || !this.isPublishedModule(module)) return [];
+    return [...this.lessons.values()]
+      .filter((lesson) => lesson.status === "DRAFT")
+      .flatMap((lesson) => {
+        const subtopic = this.subtopics.get(lesson.subtopicId);
+        const subject = this.subjects.get(module.subjectId);
+        const curriculum = subject && this.curricula.get(subject.curriculumId);
+        if (!subtopic || subtopic.moduleId !== moduleId || subtopic.status !== "PUBLISHED"
+          || !subject || subject.status !== "PUBLISHED" || !curriculum
+          || curriculum.program !== "CFA" || curriculum.status !== "PUBLISHED") return [];
+        return [{ ...lesson, subtopic: { ...subtopic, module: { ...module, subject: { ...subject, curriculum } } } }];
+      })
+      .sort((left, right) => left.order - right.order);
   }
 
   async listVideos(lessonId: string): Promise<VideoRecord[]> {
@@ -173,7 +204,12 @@ export class MemoryLearningRepository implements LearningRepository {
   }
 
   async getQuantProgress(studentId: string, year: number): Promise<QuantProgressView> {
-    const subject = [...this.subjects.values()].find((item) => item.slug === "quantitative-methods" && this.curricula.get(item.curriculumId)?.curriculumYear === year);
+    const subject = [...this.subjects.values()].find((item) => {
+      const curriculum = this.curricula.get(item.curriculumId);
+      return item.slug === "quantitative-methods" && item.status === "PUBLISHED"
+        && curriculum?.program === "CFA" && curriculum.level === "LEVEL_I"
+        && curriculum.curriculumYear === year && curriculum.status === "PUBLISHED";
+    });
     const modules = [...this.modules.values()].filter((item) => item.subjectId === subject?.id && item.status === "PUBLISHED");
     const subtopicIds = new Set([...this.subtopics.values()].filter((item) => modules.some((module) => module.id === item.moduleId) && item.status === "PUBLISHED").map((item) => item.id));
     const lessons = [...this.lessons.values()].filter((item) => subtopicIds.has(item.subtopicId) && item.status === "PUBLISHED");
@@ -343,5 +379,16 @@ export class MemoryLearningRepository implements LearningRepository {
 
   private lessonSummary(lesson: LessonRow): LessonSummary {
     const { content: _content, createdAt: _created, updatedAt: _updated, ...summary } = lesson; return summary;
+  }
+
+  private isPublishedModule(module: ModuleRow): boolean {
+    const subject = this.subjects.get(module.subjectId);
+    const curriculum = subject && this.curricula.get(subject.curriculumId);
+    return module.status === "PUBLISHED" && subject?.status === "PUBLISHED" && curriculum?.status === "PUBLISHED";
+  }
+
+  private isPublishedSubtopic(subtopic: SubtopicRow): boolean {
+    const module = this.modules.get(subtopic.moduleId);
+    return subtopic.status === "PUBLISHED" && Boolean(module && this.isPublishedModule(module));
   }
 }
