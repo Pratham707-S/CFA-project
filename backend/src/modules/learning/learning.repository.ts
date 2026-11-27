@@ -4,7 +4,7 @@ import type {
   LearningOutcomeCreateInput, LearningOutcomeMappingsInput, SubjectCreateInput, VideoCreateInput, VideoPatchInput,
 } from "./learning.schema.js";
 import type {
-  AttemptQuestion, CurriculumTree, LessonRecord, LessonSummary, ModuleTree, ProgressRecord,
+  AttemptQuestion, CurriculumTree, DraftLessonRecord, LessonRecord, LessonSummary, ModuleTree, ProgressRecord,
   PublicQuestion, QuestionAttemptRecord, QuantProgressView, SubtopicTree,
   LearningOutcomeStatementRecord, SubjectTree, TutorLessonContext, VideoRecord, WeakConceptRecord,
 } from "./learning.types.js";
@@ -22,6 +22,7 @@ export interface LearningRepository {
   listQuestionLearningOutcomes(questionId: string): Promise<LearningOutcomeStatementRecord[]>;
   listLessons(subtopicId: string): Promise<LessonSummary[]>;
   getLesson(lessonId: string): Promise<LessonRecord | null>;
+  listDraftLessonsForAdmin(moduleId: string): Promise<DraftLessonRecord[]>;
   listVideos(lessonId: string): Promise<VideoRecord[]>;
   listQuestions(lessonId: string): Promise<PublicQuestion[]>;
   getQuestionForAttempt(questionId: string): Promise<AttemptQuestion | null>;

@@ -1,21 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Check, Pencil, FileText } from "@/components/ui/icons";
+import { Check } from "@/components/ui/icons";
 
 interface LessonNotesProps {
   lessonId: string;
 }
 
 export function LessonNotes({ lessonId }: LessonNotesProps) {
-  const defaultNotes = `• Time Value of Money Notes:
-- Remember that higher compounding frequency increases the EAR.
-- Annuity due: payments at BEGINNING of period, multiply by (1 + r).
-- Perpetuity formula: PV = PMT / r (for constant PMT).
-- For growing perpetuity: PV = PMT_1 / (r - g). Make sure r > g.
-- BA II Plus: 2nd + BGN to toggle annuity mode.`;
-
-  const [notes, setNotes] = useState<string>(defaultNotes);
+  const [notes, setNotes] = useState<string>("");
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving">("saved");
 
   useEffect(() => {

@@ -8,6 +8,13 @@ export const questionDifficultySchema = z.enum(["EASY", "MEDIUM", "HARD"]);
 const slugSchema = z.string().trim().min(1).max(120).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 const textSchema = z.string().trim().min(1).max(10000);
 const orderSchema = z.number().int().min(1).max(10000);
+type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+const jsonPrimitiveSchema = z.union([z.string(), z.number().finite(), z.boolean(), z.null()]);
+const jsonValueSchema: z.ZodType<JsonValue> = z.lazy(() => z.union([
+  jsonPrimitiveSchema,
+  z.array(jsonValueSchema),
+  z.record(z.string(), jsonValueSchema),
+]));
 
 export const yearQuerySchema = z.object({ year: z.coerce.number().int().min(2000).max(2100).default(2027) });
 export const levelSlugSchema = z.enum(["level-1", "level-2", "level-3"]);
@@ -15,6 +22,15 @@ export const levelSlugSchema = z.enum(["level-1", "level-2", "level-3"]);
 export const lessonContentSchema = z.object({
   conceptIntroduction: textSchema,
   simpleExplanation: textSchema,
+  definitions: z.array(z.object({ term: textSchema, definition: textSchema }).strict()).default([]),
+  financialApplications: z.array(textSchema).default([]),
+  commonMistakes: z.array(textSchema).default([]),
+  curriculumOutcomeMappings: z.array(textSchema).default([]),
+  sourceReferences: z.array(z.object({
+    title: textSchema.max(240),
+    url: z.string().url().refine((value) => value.startsWith("https://"), "Source links must use HTTPS."),
+    scope: textSchema.max(1000),
+  }).strict()).default([]),
   formulaExplanations: z.array(z.object({
     name: textSchema,
     formula: textSchema,
@@ -25,7 +41,7 @@ export const lessonContentSchema = z.object({
     kind: z.enum(["DIAGRAM", "CHART", "TABLE", "IMAGE"]),
     caption: textSchema,
     altText: textSchema,
-    metadata: z.record(z.string(), z.unknown()).default({}),
+    metadata: z.record(z.string(), jsonValueSchema).default({}),
   })).default([]),
   workedExamples: z.array(z.object({
     title: textSchema,

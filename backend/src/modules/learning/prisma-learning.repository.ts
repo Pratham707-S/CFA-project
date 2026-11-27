@@ -7,7 +7,7 @@ import type {
 } from "./learning.schema.js";
 import type { LearningRepository } from "./learning.repository.js";
 import type {
-  AttemptQuestion, CurriculumTree, LessonRecord, LessonSummary, ModuleTree,
+  AttemptQuestion, CurriculumTree, DraftLessonRecord, LessonRecord, LessonSummary, ModuleTree,
   ProgressRecord, PublicQuestion, QuestionAttemptRecord, QuantProgressView,
   SubtopicTree, SubjectTree, TutorLessonContext, VideoRecord, WeakConceptRecord,
 } from "./learning.types.js";
@@ -122,6 +122,30 @@ export class PrismaLearningRepository implements LearningRepository {
       include: { subtopic: { include: { module: { include: { subject: { include: { curriculum: true } } } } } } },
     });
     return record as LessonRecord | null;
+  }
+
+  async listDraftLessonsForAdmin(moduleId: string): Promise<DraftLessonRecord[]> {
+    const records = await this.prisma.lesson.findMany({
+      where: {
+        status: "DRAFT",
+        subtopic: {
+          moduleId,
+          status: "PUBLISHED",
+          module: { status: "PUBLISHED", subject: { status: "PUBLISHED", curriculum: { program: "CFA", status: "PUBLISHED" } } },
+        },
+      },
+      include: {
+        subtopic: {
+          include: {
+            module: {
+              include: { subject: { include: { curriculum: true } } },
+            },
+          },
+        },
+      },
+      orderBy: [{ subtopic: { order: "asc" } }, { order: "asc" }],
+    });
+    return records;
   }
 
   async listVideos(lessonId: string): Promise<VideoRecord[]> {

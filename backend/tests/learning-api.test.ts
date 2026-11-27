@@ -43,14 +43,18 @@ describe("Quantitative Methods learning API", () => {
     await app.close();
   });
 
-  it("keeps curriculum years isolated while preserving the curriculum response envelope", async () => {
+  it("returns the published Quant and Economics subjects while preserving year isolation", async () => {
     const { app } = await harness();
     const legacy = await app.inject({ method: "GET", url: "/api/curriculum/level-1?year=2027", headers: auth() });
     expect(legacy.statusCode).toBe(200);
     expect(Object.keys(legacy.json())).toEqual(["curriculum"]);
     expect(legacy.json().curriculum).toMatchObject({ level: "LEVEL_I", curriculumYear: 2027 });
-    expect(legacy.json().curriculum.subjects).toHaveLength(1);
+    expect(legacy.json().curriculum.subjects.map((subject: { slug: string }) => subject.slug)).toEqual([
+      "quantitative-methods",
+      "economics",
+    ]);
     expect(legacy.json().curriculum.subjects[0].modules).toHaveLength(11);
+    expect(legacy.json().curriculum.subjects[1].modules).toHaveLength(8);
 
     const createdCurriculum = await app.inject({
       method: "POST", url: "/api/admin/curriculum", headers: auth("admin"),
@@ -166,9 +170,43 @@ describe("Quantitative Methods learning API", () => {
 
   it("requires a session and blocks students from admin writes", async () => {
     const { app } = await harness();
-    expect((await app.inject({ method: "GET", url: "/api/curriculum/level-1" })).statusCode).toBe(401);
+    const unauthorizedCurriculum = await app.inject({ method: "GET", url: "/api/curriculum/level-1?year=2027" });
+    expect(unauthorizedCurriculum.statusCode).toBe(401);
+    expect(unauthorizedCurriculum.json().error.code).toBe("UNAUTHENTICATED");
+    const unauthorizedResources = await app.inject({ method: "GET", url: "/api/lessons/lesson-id/resources" });
+    expect(unauthorizedResources.statusCode).toBe(401);
+    expect(unauthorizedResources.json().error.code).toBe("UNAUTHENTICATED");
     const forbidden = await app.inject({ method: "POST", url: "/api/admin/subtopics", headers: auth(), payload: { moduleId: "module-returns-of-financial-assets-and-instruments", title: "Sample", slug: "sample", order: 1 } });
     expect(forbidden.statusCode).toBe(403);
+    await app.close();
+  });
+
+  it("does not expose published child content when its curriculum is still a draft", async () => {
+    const { app } = await harness();
+    const curriculum = await app.inject({
+      method: "POST", url: "/api/admin/curriculum", headers: auth("admin"),
+      payload: { program: "TEST", level: "LEVEL_I", curriculumYear: 2030, status: "DRAFT" },
+    });
+    const subject = await app.inject({
+      method: "POST", url: "/api/admin/subjects", headers: auth("admin"),
+      payload: { curriculumId: curriculum.json().curriculum.id, name: "Draft parent subject", slug: "draft-parent-subject", order: 1, status: "PUBLISHED" },
+    });
+    const module = await app.inject({
+      method: "POST", url: "/api/admin/modules", headers: auth("admin"),
+      payload: { subjectId: subject.json().subject.id, title: "Published child module", slug: "published-child-module", order: 1, status: "PUBLISHED" },
+    });
+    const subtopic = await app.inject({
+      method: "POST", url: "/api/admin/subtopics", headers: auth("admin"),
+      payload: { moduleId: module.json().module.id, title: "Published child subtopic", slug: "published-child-subtopic", order: 1, status: "PUBLISHED" },
+    });
+    const lesson = await app.inject({
+      method: "POST", url: "/api/admin/lessons", headers: auth("admin"),
+      payload: { subtopicId: subtopic.json().subtopic.id, title: "Published child lesson", slug: "published-child-lesson", order: 1, status: "PUBLISHED" },
+    });
+
+    expect((await app.inject({ method: "GET", url: `/api/modules/${module.json().module.id}`, headers: auth() })).statusCode).toBe(404);
+    expect((await app.inject({ method: "GET", url: `/api/subtopics/${subtopic.json().subtopic.id}/lessons`, headers: auth() })).json().lessons).toEqual([]);
+    expect((await app.inject({ method: "GET", url: `/api/lessons/${lesson.json().lesson.id}`, headers: auth() })).statusCode).toBe(404);
     await app.close();
   });
 
@@ -181,6 +219,27 @@ describe("Quantitative Methods learning API", () => {
     const createdLesson = await app.inject({ method: "POST", url: "/api/admin/lessons", headers: auth("admin"), payload: { subtopicId, title: "Original test lesson", slug: "original-test-lesson", order: 1, status: "PUBLISHED", content: { conceptIntroduction: "Original fixture.", simpleExplanation: "A test fixture only.", summary: "Test summary." } } });
     expect(createdLesson.statusCode).toBe(201);
     const lessonId = createdLesson.json().lesson.id;
+    const lessonDetail = await app.inject({ method: "GET", url: `/api/lessons/${lessonId}`, headers: auth() });
+    expect(lessonDetail.statusCode).toBe(200);
+    expect(lessonDetail.json().lesson.content).toMatchObject({
+      conceptIntroduction: "Original fixture.",
+      summary: "Test summary.",
+      definitions: [],
+      financialApplications: [],
+      commonMistakes: [],
+      curriculumOutcomeMappings: [],
+      sourceReferences: [],
+    });
+    const draftLesson = await app.inject({ method: "POST", url: "/api/admin/lessons", headers: auth("admin"), payload: { subtopicId, title: "Private review draft", slug: "private-review-draft", order: 2, status: "DRAFT", content: { conceptIntroduction: "Not student facing.", simpleExplanation: "Draft text.", summary: "Draft summary." } } });
+    expect(draftLesson.statusCode).toBe(201);
+    expect((await app.inject({ method: "GET", url: `/api/lessons/${draftLesson.json().lesson.id}`, headers: auth() })).statusCode).toBe(404);
+    expect((await app.inject({ method: "GET", url: `/api/subtopics/${subtopicId}/lessons`, headers: auth() })).json().lessons.map((item: { id: string }) => item.id)).toEqual([lessonId]);
+    const draftPreviewPath = `/api/admin/modules/${moduleId}/draft-lessons`;
+    expect((await app.inject({ method: "GET", url: draftPreviewPath })).statusCode).toBe(401);
+    expect((await app.inject({ method: "GET", url: draftPreviewPath, headers: auth() })).statusCode).toBe(403);
+    const draftPreview = await app.inject({ method: "GET", url: draftPreviewPath, headers: auth("admin") });
+    expect(draftPreview.statusCode).toBe(200);
+    expect(draftPreview.json().lessons[0].content).toMatchObject({ conceptIntroduction: "Not student facing.", definitions: [] });
 
     const invalidVideo = await app.inject({ method: "POST", url: `/api/admin/lessons/${lessonId}/videos`, headers: auth("admin"), payload: { youtubeVideoId: "invented-url", title: "Test video", language: "English" } });
     expect(invalidVideo.statusCode).toBe(400);

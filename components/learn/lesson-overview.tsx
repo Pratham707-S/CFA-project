@@ -2,6 +2,7 @@
 
 import React from "react";
 import { VideoPlayer } from "./video-player";
+import type { LessonContent } from "./content-types";
 import {
   ShieldCheck,
   FileText,
@@ -15,8 +16,11 @@ interface LessonOverviewProps {
   lessonTitle: string;
   duration?: string;
   youtubeVideoId?: string;
+  videoEmbedUrl?: string;
+  videoWatchUrl?: string;
   keyConcepts: string[];
   quickNote: string;
+  content?: LessonContent | null;
   isCompleted?: boolean;
   onToggleComplete?: () => void;
   onPrevLesson?: () => void;
@@ -25,10 +29,13 @@ interface LessonOverviewProps {
 
 export function LessonOverview({
   lessonTitle,
-  duration = "18 min",
+  duration,
   youtubeVideoId,
+  videoEmbedUrl,
+  videoWatchUrl,
   keyConcepts,
   quickNote,
+  content,
   isCompleted = false,
   onToggleComplete,
   onPrevLesson,
@@ -37,7 +44,7 @@ export function LessonOverview({
   return (
     <div className="cfa-lesson-overview-content">
       {/* 1. Video Player */}
-      <VideoPlayer title={lessonTitle} duration={duration} youtubeVideoId={youtubeVideoId} />
+      <VideoPlayer title={lessonTitle} duration={duration} youtubeVideoId={youtubeVideoId} embedUrl={videoEmbedUrl} watchUrl={videoWatchUrl} />
 
       {/* 2. Key Concepts Card */}
       <div className="cfa-learn-concept-card">
@@ -48,15 +55,26 @@ export function LessonOverview({
           <h3 className="cfa-learn-card-title">Key Concepts</h3>
         </div>
 
-        <ul className="cfa-learn-concepts-list">
-          {keyConcepts.map((concept, index) => (
-            <li key={index} className="cfa-learn-concept-item">
+        {keyConcepts.length > 0 ? <ul className="cfa-learn-concepts-list">
+          {keyConcepts.map((concept) => (
+            <li key={concept} className="cfa-learn-concept-item">
               <span className="cfa-learn-bullet-dot" />
               <span>{concept}</span>
             </li>
           ))}
-        </ul>
+        </ul> : <p>No learning objectives are available for this lesson.</p>}
       </div>
+
+      {content && <div className="cfa-learn-concept-card">
+        <h3 className="cfa-learn-card-title">Lesson explanation</h3>
+        <p>{content.conceptIntroduction}</p>
+        <p>{content.simpleExplanation}</p>
+        {content.definitions.length > 0 && <dl>{content.definitions.map((item) => <div key={item.term}><dt><strong>{item.term}</strong></dt><dd>{item.definition}</dd></div>)}</dl>}
+        {content.financialApplications.length > 0 && <><h4>Financial applications</h4><ul>{content.financialApplications.map((item) => <li key={item}>{item}</li>)}</ul></>}
+        {content.commonMistakes.length > 0 && <><h4>Common mistakes</h4><ul>{content.commonMistakes.map((item) => <li key={item}>{item}</li>)}</ul></>}
+        {content.curriculumOutcomeMappings.length > 0 && <><h4>Curriculum outcomes addressed</h4><ul>{content.curriculumOutcomeMappings.map((item) => <li key={item}>{item}</li>)}</ul></>}
+        {content.sourceReferences.length > 0 && <><h4>Sources</h4><ul>{content.sourceReferences.map((item) => <li key={item.url}><a href={item.url} target="_blank" rel="noreferrer">{item.title}</a>: {item.scope}</li>)}</ul></>}
+      </div>}
 
       {/* 3. Quick Notes Card */}
       <div className="cfa-learn-quick-notes-card">
@@ -71,7 +89,7 @@ export function LessonOverview({
           <div className="cfa-learn-quick-notes-bulb">
             <Lightbulb size={20} color="#d97706" />
           </div>
-          <p className="cfa-learn-quick-notes-text">{quickNote}</p>
+          <p className="cfa-learn-quick-notes-text">{content?.conceptIntroduction ?? quickNote}</p>
         </div>
       </div>
 

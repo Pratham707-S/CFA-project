@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { apiRequest } from "@/lib/api";
+import { apiRequest, ApiRequestError } from "@/lib/api";
 import "../dashboard/dashboard-layout.css";
 import "../plan/plan-layout.css";
 import "./learn-layout.css";
@@ -25,14 +25,13 @@ import { LessonResources } from "@/components/learn/lesson-resources";
 // Data
 import { cfaSubjects, lessonResources, relatedTopics } from "@/components/learn/learn-data";
 import { Bookmark, Check, ChevronRight } from "@/components/ui/icons";
-import type { Subject, Topic, Lesson } from "@/components/learn/types";
+import type { Subject, Topic } from "@/components/learn/types";
+import { useLessonData } from "@/hooks/use-lesson-data";
 
 type ApiLesson = { id: string; title: string; description: string | null; estimatedDurationMinutes: number | null; learningObjectives: string[]; status: string };
 type ApiSubtopic = { id: string; title: string; lessons?: ApiLesson[] };
 type ApiModule = { id: string; title: string; description: string | null; learningOutcomes: string[]; subtopics?: ApiSubtopic[] };
 type ApiSubject = { id: string; name: string; slug: string; modules?: ApiModule[] };
-type ApiVideo = { id: string; youtubeVideoId: string; title: string; durationSeconds: number | null; language: string; isPrimary: boolean };
-
 function toLearnSubject(subject: ApiSubject): Subject {
   const topics: Topic[] = (subject.modules ?? []).map((module) => ({
     id: module.id,
@@ -46,22 +45,22 @@ function toLearnSubject(subject: ApiSubject): Subject {
       quickNote: lesson.description ?? "",
     })),
   }));
-  return { id: subject.id, name: subject.name, iconType: "quant", completedTopics: 0, totalTopics: topics.length, topics };
+  return { id: subject.id, name: subject.name, iconType: subject.slug === "economics" ? "econ" : "quant", completedTopics: 0, totalTopics: topics.length, topics };
 }
 
 export default function LearnPage() {
   const router = useRouter();
 
   // Navigation & User State
-  const [userName, setUserName] = useState("Pratham Sharma");
-  const [userEmail, setUserEmail] = useState("pratham@cfaprep.io");
+  const [userName, setUserName] = useState("Learner");
+  const [userEmail, setUserEmail] = useState("");
   const [currentLevel, setCurrentLevel] = useState("CFA Level I");
   const [subjects, setSubjects] = useState<Subject[]>(cfaSubjects);
-  const [apiSubject, setApiSubject] = useState<ApiSubject | null>(null);
+  const [apiSubjects, setApiSubjects] = useState<ApiSubject[]>([]);
   const [usingLiveCurriculum, setUsingLiveCurriculum] = useState(false);
-  const [curriculumMessage, setCurriculumMessage] = useState("Loading 2027 Quant curriculum…");
+  const [curriculumMessage, setCurriculumMessage] = useState("Loading CFA Level I 2027 curriculum…");
+  const [requiresSignIn, setRequiresSignIn] = useState(false);
   const [selectedLessonId, setSelectedLessonId] = useState<string | null>(null);
-  const [lessonVideos, setLessonVideos] = useState<ApiVideo[]>([]);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [videoIdInput, setVideoIdInput] = useState("");
   const [videoTitleInput, setVideoTitleInput] = useState("");
@@ -75,7 +74,6 @@ export default function LearnPage() {
   // Interactive States
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [completedTopicIds, setCompletedTopicIds] = useState<Set<string>>(new Set());
-  const [completedLessonIds, setCompletedLessonIds] = useState<Set<string>>(new Set());
 
   // Current Subject & Topic helpers
   const currentSubject =
@@ -89,15 +87,19 @@ export default function LearnPage() {
 
   const currentLessons = currentTopic.lessons ?? [];
   const currentLesson = currentLessons.find((lesson) => lesson.id === selectedLessonId) ?? currentLessons[0];
+  const lessonData = useLessonData(currentLesson?.id ?? null, usingLiveCurriculum);
   const isCurrentCompleted = usingLiveCurriculum && currentLesson
-    ? completedLessonIds.has(currentLesson.id)
+    ? lessonData.completedLessonIds.has(currentLesson.id)
     : completedTopicIds.has(currentTopic.id);
   const visibleCompletedTopicIds = usingLiveCurriculum
     ? new Set(subjects.flatMap((subject) => subject.topics
-      .filter((topic) => (topic.lessons?.length ?? 0) > 0 && topic.lessons!.every((lesson) => completedLessonIds.has(lesson.id)))
+      .filter((topic) => (topic.lessons?.length ?? 0) > 0 && topic.lessons!.every((lesson) => lessonData.completedLessonIds.has(lesson.id)))
       .map((topic) => topic.id)))
     : completedTopicIds;
-  const moduleOutcomes = apiSubject?.modules?.find((module) => module.id === currentTopic.id)?.learningOutcomes ?? [];
+  const moduleOutcomes = apiSubjects.find((subject) => subject.id === selectedSubjectId)?.modules?.find((module) => module.id === currentTopic.id)?.learningOutcomes ?? [];
+  const visibleLessonContent = lessonData.content;
+  const visibleLessonQuestions = lessonData.questions;
+  const visibleLessonVideos = lessonData.videos;
 
   // Sync profile data if available from backend (with fast fallback)
   useEffect(() => {
@@ -105,46 +107,54 @@ export default function LearnPage() {
     async function loadData() {
       try {
         const curriculum = await apiRequest<{ curriculum: { subjects: ApiSubject[] } }>("/api/curriculum/level-1?year=2027");
-        const quant = curriculum.curriculum.subjects.find((subject) => subject.slug === "quantitative-methods");
-        if (quant && isMounted) {
-          setApiSubject(quant);
-          const mapped = toLearnSubject(quant);
-          setSubjects([mapped]);
-          setSelectedSubjectId(mapped.id);
-          setSelectedTopicId(mapped.topics[0]?.id ?? "");
-          setSelectedLessonId(mapped.topics[0]?.lessons?.[0]?.id ?? null);
+        const availableSubjects = curriculum.curriculum.subjects.filter((subject) => ["quantitative-methods", "economics"].includes(subject.slug));
+        if (availableSubjects.length && isMounted) {
+          const mappedSubjects = availableSubjects.map(toLearnSubject);
+          setApiSubjects(availableSubjects);
+          setSubjects(mappedSubjects);
+          setSelectedSubjectId(mappedSubjects[0].id);
+          setSelectedTopicId(mappedSubjects[0].topics[0]?.id ?? "");
+          setSelectedLessonId(mappedSubjects[0].topics[0]?.lessons?.[0]?.id ?? null);
           setUsingLiveCurriculum(true);
-          setCurriculumMessage(mapped.topics.length ? "Showing published CFA Level I 2027 Quant modules." : "No published Quant modules are available yet.");
+          setCurriculumMessage("Showing published CFA Level I 2027 Quantitative Methods and Economics modules. Economics video candidates remain under review, and written lesson notes are incomplete.");
         } else if (isMounted) {
+          setApiSubjects([]);
           setSubjects([]);
           setUsingLiveCurriculum(true);
-          setCurriculumMessage("No published Quantitative Methods subject is available for 2027 yet.");
+          setCurriculumMessage("No published CFA Level I subjects are available for 2027 yet.");
         }
+      } catch (error) {
+        if (isMounted) {
+          const signedOut = error instanceof ApiRequestError && error.status === 401;
+          setRequiresSignIn(signedOut);
+          setCurriculumMessage(signedOut
+            ? "Sign in to load your published lessons and verified videos."
+            : "Live curriculum could not be loaded. The lesson preview below is not live course data.");
+        }
+        return;
+      }
+
+      try {
         const res = await apiRequest<{
           user?: { displayName: string | null; email: string; role?: string };
           cfaProfile?: { level: string };
         }>("/dashboard");
 
-        if (res && isMounted) {
-          if (res.user?.displayName) {
-            setUserName(res.user.displayName);
-          }
-          if (res.user?.email) {
-            setUserEmail(res.user.email);
-          }
-          if (res.user?.role) setUserRole(res.user.role);
-          if (res.cfaProfile?.level) {
-            setCurrentLevel(
-              res.cfaProfile.level === "LEVEL_II"
-                ? "CFA Level II"
-                : res.cfaProfile.level === "LEVEL_III"
-                ? "CFA Level III"
-                : "CFA Level I"
-            );
-          }
+        if (!res || !isMounted) return;
+        if (res.user?.displayName) setUserName(res.user.displayName);
+        if (res.user?.email) setUserEmail(res.user.email);
+        if (res.user?.role) setUserRole(res.user.role);
+        if (res.cfaProfile?.level) {
+          setCurrentLevel(
+            res.cfaProfile.level === "LEVEL_II"
+              ? "CFA Level II"
+              : res.cfaProfile.level === "LEVEL_III"
+              ? "CFA Level III"
+              : "CFA Level I"
+          );
         }
       } catch {
-        if (isMounted) setCurriculumMessage("Sign in to load your saved curriculum. Preview content is shown while the API is unavailable.");
+        // Curriculum and lesson videos remain usable if profile data is unavailable.
       }
     }
     loadData();
@@ -153,35 +163,10 @@ export default function LearnPage() {
     };
   }, []);
 
-  useEffect(() => {
-    if (!currentLesson?.id || !usingLiveCurriculum) {
-      setLessonVideos([]);
-      return;
-    }
-    let active = true;
-    setSelectedLessonId(currentLesson.id);
-    apiRequest<{ resources: ApiVideo[] }>(`/api/lessons/${currentLesson.id}/resources`)
-      .then((response) => { if (active) setLessonVideos(response.resources); })
-      .catch(() => { if (active) setLessonVideos([]); });
-    apiRequest<{ progress: { lessonCompleted: boolean } | null }>(`/api/lessons/${currentLesson.id}/progress`)
-      .then(({ progress }) => {
-        if (!active) return;
-        setCompletedLessonIds((previous) => {
-          const next = new Set(previous);
-          if (progress?.lessonCompleted) next.add(currentLesson.id);
-          else next.delete(currentLesson.id);
-          return next;
-        });
-      })
-      .catch(() => undefined);
-    return () => { active = false; };
-  }, [currentLesson?.id, currentTopic.id, usingLiveCurriculum]);
-
   const handleToggleComplete = () => {
     if (usingLiveCurriculum && currentLesson?.id) {
       const complete = !isCurrentCompleted;
-      apiRequest(`/api/lessons/${currentLesson.id}/progress`, { method: "POST", body: JSON.stringify({ lessonCompleted: complete }) })
-        .then(() => setCompletedLessonIds((previous) => { const next = new Set(previous); complete ? next.add(currentLesson.id) : next.delete(currentLesson.id); return next; }))
+      lessonData.setLessonCompleted(complete)
         .catch(() => setCurriculumMessage("Progress could not be saved. Please sign in again and retry."));
       return;
     }
@@ -213,8 +198,7 @@ export default function LearnPage() {
       });
       setVideoNotice("Video submitted for review. It will appear to students after an admin verifies it.");
       setVideoIdInput(""); setVideoTitleInput("");
-      const response = await apiRequest<{ resources: ApiVideo[] }>(`/api/lessons/${currentLesson.id}/resources`);
-      setLessonVideos(response.resources);
+      await lessonData.reloadVideos();
     } catch (error) {
       setVideoNotice(error instanceof Error ? error.message : "Could not add video.");
     }
@@ -257,6 +241,10 @@ export default function LearnPage() {
         <Header
           userName={userName}
           userEmail={userEmail}
+          onLogout={async () => {
+            await apiRequest("/auth/logout", { method: "POST" });
+            router.replace("/login");
+          }}
           onSearch={(query) => {
             if (query.trim()) {
               // Could filter or jump to topic
@@ -334,20 +322,33 @@ export default function LearnPage() {
               </div>}
 
               {/* Lesson Tabs */}
+              {usingLiveCurriculum && lessonData.contentLoading && <p role="status">Loading lesson content…</p>}
+              {usingLiveCurriculum && lessonData.contentError && <p role="alert">{lessonData.contentError}</p>}
               <LessonTabs
                 activeTab={activeTab}
                 onChangeTab={setActiveTab}
-                practiceCount={3}
+                practiceCount={usingLiveCurriculum ? visibleLessonQuestions.length : 3}
               />
 
               {/* Tab View Switcher */}
-              {activeTab === "lesson" && currentLesson && (
+              {requiresSignIn && <section className="cfa-learn-concept-card" role="status">
+                <h3 className="cfa-learn-card-title">Sign in to play this lesson</h3>
+                <p>Your published lessons and verified YouTube lectures are available after sign-in. The preview below is sample content.</p>
+                <button type="button" className="cfa-learn-complete-pill-btn" onClick={() => router.push("/login")}>Sign in</button>
+              </section>}
+
+              {!requiresSignIn && activeTab === "lesson" && currentLesson && (
                 <LessonOverview
                   lessonTitle={currentLesson.title}
-                  duration={currentLesson.duration || "Video not added yet"}
+                  duration={visibleLessonVideos.some((video) => video.isPrimary)
+                    ? undefined
+                    : currentLesson.duration || "Video not added yet"}
                   keyConcepts={currentLesson.keyConcepts}
-                  quickNote={currentLesson.quickNote || "No lesson notes have been published yet."}
-                  youtubeVideoId={lessonVideos.find((video) => video.isPrimary)?.youtubeVideoId}
+                  quickNote={visibleLessonContent?.conceptIntroduction ?? (lessonData.contentLoading ? "Loading lesson text…" : "No written lesson content has been published for this lesson yet.")}
+                  content={visibleLessonContent}
+                  youtubeVideoId={visibleLessonVideos.find((video) => video.isPrimary)?.youtubeVideoId}
+                  videoEmbedUrl={visibleLessonVideos.find((video) => video.isPrimary)?.embedUrl}
+                  videoWatchUrl={visibleLessonVideos.find((video) => video.isPrimary)?.videoUrl}
                   isCompleted={isCurrentCompleted}
                   onToggleComplete={handleToggleComplete}
                   onPrevLesson={handlePrevLesson}
@@ -355,7 +356,7 @@ export default function LearnPage() {
                 />
               )}
 
-              {activeTab === "lesson" && !currentLesson && <section className="cfa-learn-concept-card" aria-live="polite">
+              {!requiresSignIn && activeTab === "lesson" && !currentLesson && <section className="cfa-learn-concept-card" aria-live="polite">
                 <h3 className="cfa-learn-card-title">Lesson content is not published yet</h3>
                 <p>This module is loaded from the 2027 curriculum API. Once its subtopics and lessons are added, lesson progress and verified videos will appear here.</p>
                 {moduleOutcomes.length > 0 && <ul>{moduleOutcomes.map((outcome, index) => <li key={index}>{outcome}</li>)}</ul>}
@@ -369,22 +370,19 @@ export default function LearnPage() {
                 {videoNotice && <p role="status">{videoNotice}</p>}
               </details>}
 
-              {activeTab === "examples" && <LessonExamples />}
+              {activeTab === "examples" && <LessonExamples content={usingLiveCurriculum ? visibleLessonContent : null} />}
 
-              {activeTab === "practice" && <LessonPractice />}
+              {activeTab === "practice" && <LessonPractice key={currentLesson?.id ?? currentTopic.id} questions={usingLiveCurriculum ? visibleLessonQuestions : []} isLoading={lessonData.questionsLoading} error={lessonData.questionsError} />}
 
-              {activeTab === "summary" && <LessonSummary />}
+              {activeTab === "summary" && <LessonSummary content={usingLiveCurriculum ? visibleLessonContent : null} />}
 
-              {activeTab === "notes" && <LessonNotes lessonId={currentTopic.id} />}
+              {activeTab === "notes" && <LessonNotes key={currentLesson?.id ?? currentTopic.id} lessonId={currentLesson?.id ?? currentTopic.id} />}
             </div>
 
             {/* COLUMN 3: Right Lesson Support Column */}
             <LessonResources
-              resources={lessonResources}
+              resources={usingLiveCurriculum ? visibleLessonVideos.map((video) => ({ id: video.id, title: video.title, subtitle: `${video.language} lecture`, fileType: "doc" as const, color: "#0d7b5f", url: video.videoUrl })) : lessonResources}
               relatedTopics={relatedTopics}
-              onSelectRelatedTopic={(topicTitle) => {
-                // If user clicks a related topic, search or inform
-              }}
             />
           </div>
         </main>

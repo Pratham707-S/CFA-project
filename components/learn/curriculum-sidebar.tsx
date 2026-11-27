@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Subject, Topic } from "./types";
+import { Subject } from "./types";
 import {
   ChevronUp,
   ChevronDown,
@@ -11,7 +11,6 @@ import {
   Sigma,
   Building2,
   FileText,
-  BriefcaseBusiness,
   TrendingUp,
   Landmark,
   RefreshCw,

@@ -1,12 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { ResourceItem, RelatedTopicItem } from "./types";
 import {
-  Download,
   FileText,
   ChevronRight,
-  Check,
 } from "@/components/ui/icons";
 
 interface LessonResourcesProps {
@@ -20,37 +18,6 @@ export function LessonResources({
   relatedTopics,
   onSelectRelatedTopic,
 }: LessonResourcesProps) {
-  const [downloadingId, setDownloadingId] = useState<string | null>(null);
-  const [downloadSuccessId, setDownloadSuccessId] = useState<string | null>(null);
-
-  const handleDownload = (res: ResourceItem) => {
-    setDownloadingId(res.id);
-    setTimeout(() => {
-      setDownloadingId(null);
-      setDownloadSuccessId(res.id);
-
-      // Create a dummy text file to download for demonstration
-      const blob = new Blob(
-        [
-          `CFA Prep - ${res.title}\nTopic: Time Value of Money\nSubtitle: ${res.subtitle}\n\nKey Formulas and Review Notes included.`,
-        ],
-        { type: "text/plain;charset=utf-8" }
-      );
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${res.title.toLowerCase().replace(/\s+/g, "_")}.txt`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-
-      setTimeout(() => {
-        setDownloadSuccessId(null);
-      }, 2500);
-    }, 600);
-  };
-
   return (
     <div className="cfa-lesson-right-column">
       {/* Card 1: Lesson Resources */}
@@ -58,10 +25,8 @@ export function LessonResources({
         <h3 className="cfa-resources-card-title">Lesson Resources</h3>
 
         <div className="cfa-resources-list">
+          {resources.length === 0 && <p role="status">No verified resources are available for this lesson yet.</p>}
           {resources.map((res) => {
-            const isSuccess = downloadSuccessId === res.id;
-            const isDownloading = downloadingId === res.id;
-
             return (
               <div key={res.id} className="cfa-resource-item">
                 <div
@@ -79,22 +44,7 @@ export function LessonResources({
                   <span className="cfa-resource-subtitle">{res.subtitle}</span>
                 </div>
 
-                <button
-                  type="button"
-                  className={`cfa-resource-download-btn ${isSuccess ? "downloaded" : ""}`}
-                  onClick={() => handleDownload(res)}
-                  disabled={isDownloading}
-                  title={`Download ${res.title}`}
-                  aria-label={`Download ${res.title}`}
-                >
-                  {isSuccess ? (
-                    <Check size={16} color="#0d7b5f" strokeWidth={2.5} />
-                  ) : isDownloading ? (
-                    <span className="cfa-resource-spinner" />
-                  ) : (
-                    <Download size={16} />
-                  )}
-                </button>
+                {res.url ? <a className="cfa-resource-download-btn" href={res.url} target="_blank" rel="noreferrer" aria-label={`Open ${res.title}`}><ChevronRight size={16} /></a> : <span className="cfa-resource-download-btn" aria-hidden="true"><FileText size={16} /></span>}
               </div>
             );
           })}

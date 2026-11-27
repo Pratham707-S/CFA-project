@@ -5,7 +5,7 @@ import { requireAdminUser, requireSessionUser, type SessionAuthenticator } from 
 import type { LearningRepository } from "./learning.repository.js";
 import { LearningService } from "./learning.service.js";
 import {
-  curriculumCreateSchema, lessonCreateSchema, lessonIdParamSchema,
+  curriculumCreateSchema, lessonContentSchema, lessonCreateSchema, lessonIdParamSchema,
   learningOutcomeCreateSchema, learningOutcomeMappingsSchema, lessonPatchSchema, levelSlugSchema, moduleCreateSchema, moduleIdParamSchema,
   progressUpdateSchema, questionAttemptSchema, questionCreateSchema,
   questionIdParamSchema, subtopicCreateSchema, subtopicIdParamSchema,
@@ -92,7 +92,8 @@ export function registerLearningRoutes(app: FastifyInstance, repository: Learnin
     const { lessonId } = lessonIdParamSchema.parse(request.params);
     const lesson = await repository.getLesson(lessonId);
     if (!lesson) throw new HttpError(404, "Lesson was not found.", "LESSON_NOT_FOUND");
-    return { lesson };
+    const parsedContent = lesson.content === null ? null : lessonContentSchema.safeParse(lesson.content);
+    return { lesson: { ...lesson, content: parsedContent && parsedContent.success ? parsedContent.data : null } };
   });
 
   app.get("/api/lessons/:lessonId/resources", async (request) => {
@@ -123,7 +124,7 @@ export function registerLearningRoutes(app: FastifyInstance, repository: Learnin
     return { progress: await service.getProgress(user.id, lessonId) };
   });
 
-  app.post("/api/questions/:questionId/attempt", async (request) => {
+  app.post("/api/questions/:questionId/attempt", { config: { rateLimit: { max: 30, timeWindow: "1 minute" } } }, async (request) => {
     const user = await requireSessionUser(request, auth);
     const { questionId } = questionIdParamSchema.parse(request.params);
     const input = questionAttemptSchema.parse(request.body);
@@ -145,6 +146,14 @@ export function registerLearningRoutes(app: FastifyInstance, repository: Learnin
     await requireAdminUser(request, auth);
     const input = curriculumCreateSchema.parse(request.body);
     return reply.status(201).send({ curriculum: await repository.createCurriculum(input) });
+  });
+
+  app.get("/api/admin/modules/:moduleId/draft-lessons", async (request) => {
+    await requireAdminUser(request, auth);
+    const { moduleId } = moduleIdParamSchema.parse(request.params);
+    if (!await repository.getModule(moduleId)) throw new HttpError(404, "Learning module was not found.", "MODULE_NOT_FOUND");
+    const lessons = await repository.listDraftLessonsForAdmin(moduleId);
+    return { lessons };
   });
 
   app.post("/api/admin/subjects", async (request, reply) => {
