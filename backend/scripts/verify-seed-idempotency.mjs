@@ -58,8 +58,13 @@ async function readSeedSnapshot() {
   `);
   const videos = await pool.query(`
     SELECT v.id, v."youtubeVideoId", v.title, v."verificationStatus", v."isPrimary", v.language
-    ${fromEconomics}
+    FROM "Curriculum" c
+    JOIN "Subject" s ON s."curriculumId" = c.id
+    JOIN "LearningModule" m ON m."subjectId" = s.id
+    JOIN "Subtopic" st ON st."moduleId" = m.id
+    JOIN "Lesson" l ON l."subtopicId" = st.id
     JOIN "VideoResource" v ON v."lessonId" = l.id
+    WHERE c.program = 'CFA' AND c.level = 'LEVEL_I' AND c."curriculumYear" = 2027 AND s.slug = 'economics'
     ORDER BY v."youtubeVideoId", v.id
   `);
   const mappings = await pool.query(`

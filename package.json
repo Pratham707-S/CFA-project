@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint app components hooks lib tests eslint.config.mjs vitest.config.ts",
-    "format:check": "prettier --check hooks/use-lesson-data.ts tests eslint.config.mjs vitest.config.ts tsconfig.frontend.json .github/workflows/quality.yml backend/package.json backend/tests/integration/postgres.integration.test.ts backend/tests/test-database-target.test.ts backend/scripts/verify-seed-idempotency.mjs backend/vitest.config.mts backend/vitest.integration.config.mts",
-    "typecheck": "tsc --noEmit -p tsconfig.frontend.json",
+    "format:check": "prettier --check hooks/use-lesson-data.ts tests eslint.config.mjs vitest.config.ts .github/workflows/quality.yml backend/package.json backend/tests/integration/postgres.integration.test.ts backend/tests/test-database-target.test.ts backend/scripts/verify-seed-idempotency.mjs backend/vitest.config.mts backend/vitest.integration.config.mts",
+    "typecheck": "tsc --noEmit",
     "test:frontend": "vitest run",
     "test:frontend:watch": "vitest"
   },
