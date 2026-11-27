@@ -6,11 +6,18 @@
     "build": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "seed": "tsx prisma/seed.ts"
+    "test:coverage": "vitest run --coverage",
+    "test:integration": "vitest run --config vitest.integration.config.mts",
+    "typecheck": "tsc --noEmit",
+    "prisma:generate": "prisma generate --schema prisma/schema.prisma",
+    "prisma:validate": "prisma validate --schema prisma/schema.prisma",
+    "seed": "tsx prisma/seed.ts",
+    "seed:verify-idempotency": "node scripts/verify-seed-idempotency.mjs"
   },
   "dependencies": {
     "@fastify/cookie": "^11.1.5",
     "@fastify/cors": "latest",
+    "@fastify/rate-limit": "11.3.0",
     "@prisma/adapter-pg": "^7.10.1",
     "@prisma/client": "^7.10.1",
     "dotenv": "^18.0.10",
@@ -22,9 +29,17 @@
   "devDependencies": {
     "@types/node": "latest",
     "@types/pg": "^8.23.1",
+    "@vitest/coverage-v8": "5.1.1",
     "prisma": "^7.10.1",
     "tsx": "latest",
     "typescript": "latest",
     "vitest": "latest"
-  }
+  },
+  "overrides": {
+    "effect": "3.22.5"
+  },
+  "engines": {
+    "node": ">=26.13.1 <27"
+  },
+  "packageManager": "npm@11.20.0"
 }
