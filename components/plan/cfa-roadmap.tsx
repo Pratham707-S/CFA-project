@@ -82,7 +82,6 @@ export function CfaRoadmap({
           {phases.map((phase) => {
             const isCompleted = phase.status === "completed";
             const isCurrent = phase.status === "current";
-            const isUpcoming = phase.status === "upcoming";
 
             return (
               <div

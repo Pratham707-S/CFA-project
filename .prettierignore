@@ -1,0 +1,6 @@
+.next
+backend/node_modules
+node_modules
+coverage
+package-lock.json
+backend/package-lock.json

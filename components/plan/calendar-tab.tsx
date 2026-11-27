@@ -3,7 +3,7 @@
 import React from "react";
 import { MonthlyCalendarCard } from "./monthly-calendar-card";
 import { Card } from "@/components/ui/card";
-import { Target, Clock } from "@/components/ui/icons";
+import { Clock } from "@/components/ui/icons";
 
 export function CalendarTab() {
   const milestones = [

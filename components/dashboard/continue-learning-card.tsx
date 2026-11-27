@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { BookOpen } from "@/components/ui/icons";
 import { Card } from "@/components/ui/card";
 
@@ -46,10 +47,12 @@ export function ContinueLearningCard({
       <div className="cfa-continue-learning-body">
         {/* Lesson Thumbnail */}
         <div className="cfa-lesson-thumbnail-wrapper">
-          <img
+          <Image
             src={thumbnailUrl}
             alt="3D isometric blocks for Inventory Valuation"
             className="cfa-lesson-thumbnail-img"
+            width={240}
+            height={160}
           />
         </div>
 
